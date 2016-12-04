@@ -1,0 +1,358 @@
+<html>
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script>
+$(() => {
+  $(".grid-wrapper").on( 'mousewheel DOMMouseScroll', function (e) {
+
+    const e0 = e.originalEvent;
+
+    let deltaY = e0.wheelDeltaY;
+    let scrollDistanceY = (deltaY < 0 ? 1 : -1 ) * 30;
+
+    let deltaX = e0.wheelDeltaX;
+    let scrollDistanceX = (deltaX < 0 ? 1 : -1 ) * 30;
+
+    this.scrollTop += scrollDistanceY;
+    this.scrollLeft += scrollDistanceX;
+
+    e.preventDefault();
+  });
+
+  $(".grid-wrapper").scroll(function(e){
+    $(".grid-column-labels").css("top", this.scrollTop);
+    $(".grid-row-labels").css("left", this.scrollLeft);
+    $(".grid-blank-label").css("top", this.scrollTop);
+    $(".grid-blank-label").css("left", this.scrollLeft);
+
+  });
+});
+    </script>
+
+    <style>
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.grid-wrapper {
+  display: block;
+  position: relative;
+  font-size: 0;
+  background: #cccccc;
+  overflow: scroll;
+  height: 100vh;
+
+}
+
+.grid {
+  display: inline-block;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 26px 0px 0px 50px;
+}
+
+.grid-row {
+  display: block;
+  white-space: nowrap;
+}
+
+.grid-row-labels {
+  display: inline-block;
+  position: absolute;
+  top: 26px;
+}
+
+.grid-column-labels {
+  display: block;
+  position: absolute;
+  overflow: hidden;
+  white-space: nowrap;
+  left: 50px;
+}
+
+.grid-row-labels .grid-cell {
+  display: block;
+  width: 50px;
+  height: 26px;
+  border-right: 1px solid #ccc;
+}
+
+.grid-column-labels .grid-cell {
+  border-bottom: 1px solid #ccc;
+}
+
+.grid-row-labels .grid-cell,
+.grid-column-labels .grid-cell {
+  background: #f3f3f3;
+  font-family: Arial;
+  text-align: center;
+  line-height: 26px;
+  box-sizing: border-box;
+}
+
+.grid-cell {
+  display: inline-block;
+  width: 100px;
+  height: 26px;
+  font-size: 12px;
+  overflow: hidden;
+  background: #fff;
+  margin: 0px 1px 1px 0px;
+}
+
+.grid-blank-label {
+  height: 26px;
+  width: 50px;
+  background: #f3f3f3;
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  border-right: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+
+    </style>
+
+  </head>
+  <body>
+    <section class="grid-wrapper">
+      <span class="grid-blank-label"></span>
+      <span class="grid-column-labels">
+        <span class="grid-cell">A</span>
+        <span class="grid-cell">B</span>
+        <span class="grid-cell">C</span>
+        <span class="grid-cell">D</span>
+        <span class="grid-cell">E</span>
+        <span class="grid-cell">F</span>
+        <span class="grid-cell">G</span>
+      </span>
+      <span class="grid-row-labels">
+        <span class="grid-cell">1</span>
+        <span class="grid-cell">2</span>
+        <span class="grid-cell">3</span>
+        <span class="grid-cell">4</span>
+        <span class="grid-cell">5</span>
+        <span class="grid-cell">6</span>
+        <span class="grid-cell">7</span>
+        <span class="grid-cell">8</span>
+        <span class="grid-cell">9</span>
+        <span class="grid-cell">10</span>
+        <span class="grid-cell">11</span>
+        <span class="grid-cell">12</span>
+        <span class="grid-cell">13</span>
+        <span class="grid-cell">14</span>
+        <span class="grid-cell">15</span>
+        <span class="grid-cell">16</span>
+        <span class="grid-cell">17</span>
+        <span class="grid-cell">18</span>
+        <span class="grid-cell">7</span>
+        <span class="grid-cell">7</span>
+        <span class="grid-cell">7</span>
+        <span class="grid-cell">7</span>
+        <span class="grid-cell">7</span>
+        <span class="grid-cell">7</span>
+        <span class="grid-cell">7</span>
+        <span class="grid-cell">7</span>
+        <span class="grid-cell">7</span>
+        <span class="grid-cell">7</span>
+      </span>
+      <section class="grid">
+        <span class="grid-row">
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+        </span>
+        <span class="grid-row">
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+        </span>
+        <span class="grid-row">
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+        </span>
+        <span class="grid-row">
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+        </span>
+        <span class="grid-row">
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+        </span>
+        <span class="grid-row">
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+        </span>
+        <span class="grid-row">
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+        </span>
+        <span class="grid-row">
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+        </span>
+        <span class="grid-row">
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+        </span>
+        <span class="grid-row">
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+        </span>
+        <span class="grid-row">
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+        </span>
+        <span class="grid-row">
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+        </span>
+        <span class="grid-row">
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+        </span>
+        <span class="grid-row">
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+        </span>
+        <span class="grid-row">
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+        </span>
+        <span class="grid-row">
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+        </span>
+        <span class="grid-row">
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+        </span>
+        <span class="grid-row">
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+        </span>
+        <span class="grid-row">
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+        </span>
+        <span class="grid-row">
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+        </span>
+        <span class="grid-row">
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+          <span class="grid-cell"></span>
+        </span>
+      </section>
+    </section>
+  </body>
+</html>
