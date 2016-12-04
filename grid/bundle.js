@@ -21527,6 +21527,32 @@
 	  }
 	
 	  _createClass(Grid, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      $(".grid-wrapper").on('mousewheel DOMMouseScroll', function (e) {
+	
+	        var e0 = e.originalEvent;
+	
+	        var deltaY = e0.wheelDeltaY;
+	        var scrollDistanceY = (deltaY < 0 ? 1 : -1) * 30;
+	
+	        var deltaX = e0.wheelDeltaX;
+	        var scrollDistanceX = (deltaX < 0 ? 1 : -1) * 30;
+	
+	        this.scrollTop += scrollDistanceY;
+	        this.scrollLeft += scrollDistanceX;
+	
+	        e.preventDefault();
+	      });
+	
+	      $(".grid-wrapper").scroll(function (e) {
+	        $(".grid-column-labels").css("top", this.scrollTop);
+	        $(".grid-row-labels").css("left", this.scrollLeft);
+	        $(".grid-blank-label").css("top", this.scrollTop);
+	        $(".grid-blank-label").css("left", this.scrollLeft);
+	      });
+	    }
+	  }, {
 	    key: 'rowHeads',
 	    value: function rowHeads() {
 	      var rowHeads = new Array(this.state.grid.length);
@@ -21622,9 +21648,9 @@
 	function blankSheet() {
 	  var grid = new Array(30);
 	
-	  for (var i = 0; i < 30; i++) {
-	    grid[i] = new Array(10);
-	    for (var j = 0; j < 10; j++) {
+	  for (var i = 0; i < grid.length; i++) {
+	    grid[i] = new Array(26);
+	    for (var j = 0; j < grid[i].length; j++) {
 	      grid[i][j] = "";
 	    }
 	  }
@@ -41209,6 +41235,10 @@
 	
 	var _sheet_nav_container2 = _interopRequireDefault(_sheet_nav_container);
 	
+	var _doc_editor_container = __webpack_require__(228);
+	
+	var _doc_editor_container2 = _interopRequireDefault(_doc_editor_container);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -41240,6 +41270,11 @@
 	      return _react2.default.createElement(
 	        'section',
 	        { className: 'doc-wrapper' },
+	        _react2.default.createElement(
+	          'section',
+	          { className: 'doc-editor' },
+	          _react2.default.createElement(_doc_editor_container2.default, null)
+	        ),
 	        _react2.default.createElement(
 	          'section',
 	          { className: 'doc' },
@@ -41390,6 +41425,185 @@
 	}(_react2.default.Component);
 	
 	exports.default = SheetNav;
+
+/***/ },
+/* 228 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _reactRedux = __webpack_require__(182);
+	
+	var _doc_editor = __webpack_require__(229);
+	
+	var _doc_editor2 = _interopRequireDefault(_doc_editor);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var mapStateToProps = function mapStateToProps(state) {
+	  return {};
+	};
+	// import {  } from '../../actions/sheet_actions';
+	
+	
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	  return {};
+	};
+	
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_doc_editor2.default);
+
+/***/ },
+/* 229 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _content_tool_container = __webpack_require__(230);
+	
+	var _content_tool_container2 = _interopRequireDefault(_content_tool_container);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var DocEditor = function (_React$Component) {
+	  _inherits(DocEditor, _React$Component);
+	
+	  function DocEditor(props) {
+	    _classCallCheck(this, DocEditor);
+	
+	    return _possibleConstructorReturn(this, (DocEditor.__proto__ || Object.getPrototypeOf(DocEditor)).call(this, props));
+	  }
+	
+	  _createClass(DocEditor, [{
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'section',
+	        { className: 'toolbox' },
+	        _react2.default.createElement(_content_tool_container2.default, null)
+	      );
+	    }
+	  }]);
+	
+	  return DocEditor;
+	}(_react2.default.Component);
+	
+	exports.default = DocEditor;
+
+/***/ },
+/* 230 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _reactRedux = __webpack_require__(182);
+	
+	var _content_tool = __webpack_require__(231);
+	
+	var _content_tool2 = _interopRequireDefault(_content_tool);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var mapStateToProps = function mapStateToProps(state) {
+	  return {};
+	};
+	// import {  } from '../../actions/sheet_actions';
+	
+	
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	  return {};
+	};
+	
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_content_tool2.default);
+
+/***/ },
+/* 231 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var ContentTool = function (_React$Component) {
+	  _inherits(ContentTool, _React$Component);
+	
+	  function ContentTool(props) {
+	    _classCallCheck(this, ContentTool);
+	
+	    var _this = _possibleConstructorReturn(this, (ContentTool.__proto__ || Object.getPrototypeOf(ContentTool)).call(this, props));
+	
+	    _this.state = {
+	      content: ""
+	    };
+	
+	    _this.contentChanged = _this.contentChanged.bind(_this);
+	    return _this;
+	  }
+	
+	  _createClass(ContentTool, [{
+	    key: "contentChanged",
+	    value: function contentChanged(e) {
+	      this.setState({ content: e.target.value });
+	    }
+	  }, {
+	    key: "render",
+	    value: function render() {
+	      return _react2.default.createElement(
+	        "section",
+	        { className: "content-tool" },
+	        _react2.default.createElement("span", { className: "fn-logo" }),
+	        _react2.default.createElement(
+	          "span",
+	          { className: "content-input" },
+	          _react2.default.createElement("textarea", { value: this.state.content, onChange: this.contentChanged })
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return ContentTool;
+	}(_react2.default.Component);
+	
+	exports.default = ContentTool;
 
 /***/ }
 /******/ ]);

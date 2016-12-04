@@ -103,7 +103,7 @@ body {
 }
 
 .selected-cell {
-  border: 1px solid #4285f4;
+  border: 2px solid #4285f4;
 }
 
 .grid-cell textarea {

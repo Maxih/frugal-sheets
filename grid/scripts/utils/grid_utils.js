@@ -28,9 +28,9 @@ export function newSheetName(taken) {
 export function blankSheet() {
     const grid = new Array(30);
 
-    for(let i = 0; i < 30; i++) {
-      grid[i] = new Array(10);
-      for(let j = 0; j < 10; j++) {
+    for(let i = 0; i < grid.length; i++) {
+      grid[i] = new Array(26);
+      for(let j = 0; j < grid[i].length; j++) {
         grid[i][j] = "";
       }
     }

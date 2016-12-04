@@ -1,8 +1,6 @@
 import React from 'react';
 import {newSheetName} from '../../utils/grid_utils';
 
-
-
 export default class SheetNav extends React.Component {
   constructor() {
     super();
