@@ -13,16 +13,26 @@ export default class ContentTool extends React.Component {
 
   contentChanged(e) {
     this.setState({content: e.target.value});
+    const {activeCell, updateCell} = this.props;
+    const cell = {
+      content: this.state.content,
+      col: activeCell.col,
+      row: activeCell.row
+    }
+
+    updateCell(cell);
   }
 
   render() {
     return (
-      <section className="content-tool">
-        <span className="fn-logo"></span>
-        <span className="content-input">
-          <textarea value={this.state.content} onChange={this.contentChanged}/>
+      <section className="formula-bar">
+        <span className="formula-logo">fx</span>
+        <span className="formula">
+          <input type="text" value={this.state.content} onChange={this.contentChanged}/>
         </span>
       </section>
     );
   }
 }
+
+<div id="t-formula-bar-label"><div class="docs-icon goog-inline-block"><div class="docs-icon-img-container docs-icon-img docs-icon-insert-formula"></div></div></div>

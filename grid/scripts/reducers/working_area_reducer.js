@@ -2,7 +2,7 @@ import * as Action from '../actions/working_area_actions.js';
 import {merge} from 'lodash';
 
 const defaults = {
-  activeCell: {},
+  activeCell: { row: 0, col: 0},
   selecting: false,
   selection: {
     start: {},

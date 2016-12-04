@@ -109,4 +109,5 @@ body {
 .grid-cell textarea {
   border: none;
   display: block;
+  outline: none;
 }

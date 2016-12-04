@@ -23781,7 +23781,7 @@
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
 	var defaults = {
-	  activeCell: {},
+	  activeCell: { row: 0, col: 0 },
 	  selecting: false,
 	  selection: {
 	    start: {},
@@ -41521,6 +41521,8 @@
 	
 	var _reactRedux = __webpack_require__(182);
 	
+	var _sheet_actions = __webpack_require__(222);
+	
 	var _content_tool = __webpack_require__(231);
 	
 	var _content_tool2 = _interopRequireDefault(_content_tool);
@@ -41528,13 +41530,17 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var mapStateToProps = function mapStateToProps(state) {
-	  return {};
+	  return {
+	    activeCell: state.workingArea.activeCell
+	  };
 	};
-	// import {  } from '../../actions/sheet_actions';
-	
 	
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-	  return {};
+	  return {
+	    updateCell: function updateCell(cell) {
+	      return dispatch((0, _sheet_actions.updateCell)(cell));
+	    }
+	  };
 	};
 	
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_content_tool2.default);
@@ -41583,18 +41589,33 @@
 	    key: "contentChanged",
 	    value: function contentChanged(e) {
 	      this.setState({ content: e.target.value });
+	      var _props = this.props,
+	          activeCell = _props.activeCell,
+	          updateCell = _props.updateCell;
+	
+	      var cell = {
+	        content: this.state.content,
+	        col: activeCell.col,
+	        row: activeCell.row
+	      };
+	
+	      updateCell(cell);
 	    }
 	  }, {
 	    key: "render",
 	    value: function render() {
 	      return _react2.default.createElement(
 	        "section",
-	        { className: "content-tool" },
-	        _react2.default.createElement("span", { className: "fn-logo" }),
+	        { className: "formula-bar" },
 	        _react2.default.createElement(
 	          "span",
-	          { className: "content-input" },
-	          _react2.default.createElement("textarea", { value: this.state.content, onChange: this.contentChanged })
+	          { className: "formula-logo" },
+	          "fx"
+	        ),
+	        _react2.default.createElement(
+	          "span",
+	          { className: "formula" },
+	          _react2.default.createElement("input", { type: "text", value: this.state.content, onChange: this.contentChanged })
 	        )
 	      );
 	    }
@@ -41604,6 +41625,17 @@
 	}(_react2.default.Component);
 	
 	exports.default = ContentTool;
+	
+	
+	_react2.default.createElement(
+	  "div",
+	  { id: "t-formula-bar-label" },
+	  _react2.default.createElement(
+	    "div",
+	    { "class": "docs-icon goog-inline-block" },
+	    _react2.default.createElement("div", { "class": "docs-icon-img-container docs-icon-img docs-icon-insert-formula" })
+	  )
+	);
 
 /***/ }
 /******/ ]);
