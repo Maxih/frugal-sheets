@@ -23522,12 +23522,7 @@
 	  function Grid(props) {
 	    _classCallCheck(this, Grid);
 	
-	    var _this = _possibleConstructorReturn(this, (Grid.__proto__ || Object.getPrototypeOf(Grid)).call(this, props));
-	
-	    _this.state = {
-	      grid: props.grid
-	    };
-	    return _this;
+	    return _possibleConstructorReturn(this, (Grid.__proto__ || Object.getPrototypeOf(Grid)).call(this, props));
 	  }
 	
 	  _createClass(Grid, [{
@@ -23559,19 +23554,30 @@
 	  }, {
 	    key: 'rowHeads',
 	    value: function rowHeads() {
-	      var rowHeads = new Array(this.state.grid.length);
+	      var rowHeads = new Array(this.props.grid.length);
 	      for (var i = 0; i < rowHeads.length; i++) {
-	        rowHeads[i] = '' + (i + 1);
+	
+	        var head = {
+	          content: '' + (i + 1),
+	          size: this.props.grid[i][0].height
+	        };
+	
+	        rowHeads[i] = head;
 	      }
 	      return rowHeads;
 	    }
 	  }, {
 	    key: 'colHeads',
 	    value: function colHeads() {
-	      var columnHeads = new Array(this.state.grid[0].length);
+	      var columnHeads = new Array(this.props.grid[0].length);
 	
 	      for (var i = 0; i < columnHeads.length; i++) {
-	        columnHeads[i] = (0, _grid_utils.numToChar)(i + 1);
+	        var head = {
+	          content: (0, _grid_utils.numToChar)(i + 1),
+	          size: this.props.grid[0][i].width
+	        };
+	        console.log(head.size);
+	        columnHeads[i] = head;
 	      }
 	
 	      return columnHeads;
@@ -23579,7 +23585,7 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var rows = this.state.grid.map(function (row, idx) {
+	      var rows = this.props.grid.map(function (row, idx) {
 	        return _react2.default.createElement(_grid_row2.default, { key: idx, rowId: idx, row: row });
 	      });
 	
@@ -24014,14 +24020,16 @@
 	    value: function render() {
 	      var _this2 = this;
 	
+	      console.log("rendered");
 	      var cells = this.props.row.map(function (cell, idx) {
+	        console.log(cell);
 	        if (!_this2.props.col) {
 	          return _react2.default.createElement(_grid_header_cell_container2.default, {
 	            key: idx,
 	            col: true,
 	            colId: idx,
 	            rowId: _this2.props.curId,
-	            content: cell
+	            cell: cell
 	          });
 	        } else {
 	          return _react2.default.createElement(_grid_header_cell_container2.default, {
@@ -24029,7 +24037,7 @@
 	            col: false,
 	            colId: _this2.props.curId,
 	            rowId: idx,
-	            content: cell
+	            cell: cell
 	          });
 	        }
 	      });
@@ -41752,7 +41760,8 @@
 	  var curContent = ownProps.rowId === "" || ownProps.colId === "" ? ownProps.headerVal : state.doc.sheets[state.doc.activeSheet].data[ownProps.rowId][ownProps.colId];
 	  return {
 	    selection: state.doc.sheets[state.doc.activeSheet].workingArea.selection,
-	    activeCell: state.doc.sheets[state.doc.activeSheet].workingArea.activeCell
+	    activeCell: state.doc.sheets[state.doc.activeSheet].workingArea.activeCell,
+	    activeSheet: state.doc.activeSheet
 	  };
 	};
 	
@@ -41808,8 +41817,8 @@
 	    var _this = _possibleConstructorReturn(this, (GridHeaderCell.__proto__ || Object.getPrototypeOf(GridHeaderCell)).call(this, props));
 	
 	    _this.state = {
-	      content: props.content,
-	      size: 0
+	      content: props.cell.content,
+	      size: props.cell.size
 	    };
 	
 	    _this.headerResize = _this.headerResize.bind(_this);
@@ -41880,11 +41889,19 @@
 	    key: 'render',
 	    value: function render() {
 	
+	      var style = {};
+	
+	      if (this.props.col) {
+	        style.width = this.props.cell.size;
+	      } else {
+	        style.height = this.props.cell.size;
+	      }
+	
 	      return _react2.default.createElement(
 	        'span',
 	        {
-	          className: this.generateCellClass()
-	
+	          className: this.generateCellClass(),
+	          style: style
 	        },
 	        this.state.content,
 	        _react2.default.createElement('span', { draggable: 'true', onDrag: this.headerResize, onDragEnd: this.resizeEnd, className: 'resizer' })

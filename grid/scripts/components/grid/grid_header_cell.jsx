@@ -8,8 +8,8 @@ export default class GridHeaderCell extends React.Component {
     super(props);
 
     this.state = {
-      content: props.content,
-      size: 0
+      content: props.cell.content,
+      size: props.cell.size
     }
 
     this.headerResize = this.headerResize.bind(this);
@@ -67,14 +67,20 @@ export default class GridHeaderCell extends React.Component {
     return className;
   }
 
-
-
   render() {
+
+    const style = {};
+
+    if(this.props.col) {
+      style.width = this.props.cell.size;
+    } else {
+      style.height = this.props.cell.size;
+    }
 
     return (
       <span
         className={this.generateCellClass()}
-
+        style={style}
         >
         {this.state.content}
         <span draggable="true" onDrag={this.headerResize} onDragEnd={this.resizeEnd} className="resizer"></span>

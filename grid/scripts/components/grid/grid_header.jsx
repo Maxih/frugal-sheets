@@ -11,7 +11,7 @@ export default class GridHeader extends React.Component {
             col={true}
             colId={idx}
             rowId={this.props.curId}
-            content={cell}
+            cell={cell}
             />
         );
       } else {
@@ -21,7 +21,7 @@ export default class GridHeader extends React.Component {
             col={false}
             colId={this.props.curId}
             rowId={idx}
-            content={cell}
+            cell={cell}
             />
         );
       }

@@ -8,6 +8,7 @@ const mapStateToProps = (state, ownProps) => {
   return {
     selection: state.doc.sheets[state.doc.activeSheet].workingArea.selection,
     activeCell: state.doc.sheets[state.doc.activeSheet].workingArea.activeCell,
+    activeSheet: state.doc.activeSheet,
   };
 };
 

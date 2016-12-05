@@ -8,9 +8,6 @@ export default class Grid extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      grid: props.grid
-    }
   }
 
   componentDidMount() {
@@ -39,25 +36,36 @@ export default class Grid extends React.Component {
   }
 
   rowHeads() {
-    const rowHeads = new Array(this.state.grid.length);
+    const rowHeads = new Array(this.props.grid.length);
     for(let i = 0; i < rowHeads.length; i++) {
-      rowHeads[i] = `${i+1}`;
+
+      const head = {
+        content: `${i+1}`,
+        size: this.props.grid[i][0].height
+      }
+
+      rowHeads[i] = head
     }
     return rowHeads;
   }
 
   colHeads() {
-    const columnHeads = new Array(this.state.grid[0].length);
+    const columnHeads = new Array(this.props.grid[0].length);
 
     for(let i = 0; i < columnHeads.length; i++) {
-      columnHeads[i] = numToChar(i+1);
+      const head = {
+        content: numToChar(i+1),
+        size: this.props.grid[0][i].width
+      }
+      console.log(head.size);
+      columnHeads[i] = head;
     }
 
     return columnHeads;
   }
 
   render() {
-    const rows = this.state.grid.map((row, idx) => {
+    const rows = this.props.grid.map((row, idx) => {
       return (
         <GridRow key={idx} rowId={idx} row={row} />
       );
