@@ -29,7 +29,7 @@ function SheetReducer(state = defaults, action) {
   switch(action.type) {
     case Action.UPDATE_CELL:
       const cell = action.cell;
-      curSheet.data[cell.row][cell.col] = cell.content;
+      curSheet.data[cell.row][cell.col].content = cell.content;
       curWorkingArea.activeCell.content = cell.content;
       return newState;
 
@@ -64,6 +64,19 @@ function SheetReducer(state = defaults, action) {
       curWorkingArea.selection.end = action.end;
       return newState;
 
+    case Action.RESIZE_COL:
+
+      for(let i = 0; i < curSheet.data.length; i++)
+        curSheet.data[i][action.colId].width = action.width;
+
+      return newState;
+
+    case Action.RESIZE_ROW:
+
+      for(let i = 0; i < curSheet.data[0].length; i++)
+        curSheet.data[action.rowId][i].height = action.height;
+
+      return newState;
     default:
       return state;
   }

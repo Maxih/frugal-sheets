@@ -8,7 +8,7 @@ const mapStateToProps = (state, ownProps) => {
     selecting: state.doc.sheets[state.doc.activeSheet].workingArea.selecting,
     selection: state.doc.sheets[state.doc.activeSheet].workingArea.selection,
     activeCell: state.doc.sheets[state.doc.activeSheet].workingArea.activeCell,
-    content: state.doc.sheets[state.doc.activeSheet].data[ownProps.rowId][ownProps.colId]
+    cell: state.doc.sheets[state.doc.activeSheet].data[ownProps.rowId][ownProps.colId]
   };
 };
 

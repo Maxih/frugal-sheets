@@ -5,7 +5,7 @@ export default class CellInput extends React.Component {
     super(props);
 
     this.state = {
-      content: props.content
+      content: props.cell.content
     }
 
     this.cellChanged = this.cellChanged.bind(this);
@@ -26,7 +26,7 @@ export default class CellInput extends React.Component {
   render() {
 
     return (
-      <input type="text" onChange={this.cellChanged} value={this.props.content} />
+      <input type="text" onChange={this.cellChanged} value={this.props.cell.content} />
     );
   }
 }

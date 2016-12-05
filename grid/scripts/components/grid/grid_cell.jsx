@@ -8,7 +8,7 @@ export default class GridCell extends React.Component {
     super(props);
 
     this.state = {
-      content: props.content
+      content: props.cell.content
     }
 
     this.mouseOver = this.mouseOver.bind(this);
@@ -82,12 +82,17 @@ export default class GridCell extends React.Component {
   }
 
   render() {
-    let content = this.props.content;
+    let content = this.props.cell.content;
 
     if(this.isSelectedCell()) {
       content = (
         <textarea ref="cellTextArea" onChange={this.cellChanged} value={content} />
       );
+    }
+
+    const style = {
+      width: this.props.cell.width,
+      height: this.props.cell.height
     }
 
     return (
@@ -96,6 +101,7 @@ export default class GridCell extends React.Component {
         onMouseDown={this.mouseAction}
         onMouseUp={this.mouseAction}
         onMouseOver={this.mouseOver}
+        style={style}
         >
         {content}
       </span>

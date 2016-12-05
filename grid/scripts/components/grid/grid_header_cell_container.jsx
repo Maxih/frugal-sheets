@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import GridHeaderCell from './grid_header_cell';
+import {resizeRow, resizeCol} from '../../actions/sheet_actions';
 
 const mapStateToProps = (state, ownProps) => {
 
@@ -11,7 +12,8 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 const mapDispatchToProps = dispatch => ({
-
+  resizeRow: (rowId, height) => dispatch(resizeRow(rowId, height)),
+  resizeCol: (colId, width) => dispatch(resizeCol(colId, width))
 });
 
 export default connect(

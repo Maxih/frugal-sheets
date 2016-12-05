@@ -23310,6 +23310,8 @@
 	var RECEIVE_START_COORD = exports.RECEIVE_START_COORD = "RECEIVE_START_COORD";
 	var RECEIVE_END_COORD = exports.RECEIVE_END_COORD = "RECEIVE_END_COORD";
 	var SELECTING_TEMP_COORD = exports.SELECTING_TEMP_COORD = "SELECTING_TEMP_COORD";
+	var RESIZE_ROW = exports.RESIZE_ROW = "RESIZE_ROW";
+	var RESIZE_COL = exports.RESIZE_COL = "RESIZE_COL";
 	
 	var updateCell = exports.updateCell = function updateCell(cell) {
 	  return {
@@ -23353,6 +23355,22 @@
 	  return {
 	    type: SELECTING_TEMP_COORD,
 	    end: coord
+	  };
+	};
+	
+	var resizeRow = exports.resizeRow = function resizeRow(rowId, height) {
+	  return {
+	    type: RESIZE_ROW,
+	    rowId: rowId,
+	    height: height
+	  };
+	};
+	
+	var resizeCol = exports.resizeCol = function resizeCol(colId, width) {
+	  return {
+	    type: RESIZE_COL,
+	    colId: colId,
+	    width: width
 	  };
 	};
 
@@ -23637,7 +23655,11 @@
 	  for (var i = 0; i < grid.length; i++) {
 	    grid[i] = new Array(26);
 	    for (var j = 0; j < grid[i].length; j++) {
-	      grid[i][j] = "";
+	      grid[i][j] = {
+	        content: "",
+	        width: 100,
+	        height: 26
+	      };
 	    }
 	  }
 	
@@ -23758,7 +23780,7 @@
 	    selecting: state.doc.sheets[state.doc.activeSheet].workingArea.selecting,
 	    selection: state.doc.sheets[state.doc.activeSheet].workingArea.selection,
 	    activeCell: state.doc.sheets[state.doc.activeSheet].workingArea.activeCell,
-	    content: state.doc.sheets[state.doc.activeSheet].data[ownProps.rowId][ownProps.colId]
+	    cell: state.doc.sheets[state.doc.activeSheet].data[ownProps.rowId][ownProps.colId]
 	  };
 	};
 	
@@ -23824,7 +23846,7 @@
 	    var _this = _possibleConstructorReturn(this, (GridCell.__proto__ || Object.getPrototypeOf(GridCell)).call(this, props));
 	
 	    _this.state = {
-	      content: props.content
+	      content: props.cell.content
 	    };
 	
 	    _this.mouseOver = _this.mouseOver.bind(_this);
@@ -23920,11 +23942,16 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var content = this.props.content;
+	      var content = this.props.cell.content;
 	
 	      if (this.isSelectedCell()) {
 	        content = _react2.default.createElement('textarea', { ref: 'cellTextArea', onChange: this.cellChanged, value: content });
 	      }
+	
+	      var style = {
+	        width: this.props.cell.width,
+	        height: this.props.cell.height
+	      };
 	
 	      return _react2.default.createElement(
 	        'span',
@@ -23932,7 +23959,8 @@
 	          className: this.generateCellClass(),
 	          onMouseDown: this.mouseAction,
 	          onMouseUp: this.mouseAction,
-	          onMouseOver: this.mouseOver
+	          onMouseOver: this.mouseOver,
+	          style: style
 	        },
 	        content
 	      );
@@ -24439,7 +24467,7 @@
 	  switch (action.type) {
 	    case Action.UPDATE_CELL:
 	      var cell = action.cell;
-	      curSheet.data[cell.row][cell.col] = cell.content;
+	      curSheet.data[cell.row][cell.col].content = cell.content;
 	      curWorkingArea.activeCell.content = cell.content;
 	      return newState;
 	
@@ -24473,6 +24501,17 @@
 	      curWorkingArea.selection.end = action.end;
 	      return newState;
 	
+	    case Action.RESIZE_COL:
+	
+	      for (var i = 0; i < curSheet.data.length; i++) {
+	        curSheet.data[i][action.colId].width = action.width;
+	      }return newState;
+	
+	    case Action.RESIZE_ROW:
+	
+	      for (var _i = 0; _i < curSheet.data[0].length; _i++) {
+	        curSheet.data[action.rowId][_i].height = action.height;
+	      }return newState;
 	    default:
 	      return state;
 	  }
@@ -41605,7 +41644,7 @@
 	
 	  return {
 	    activeCell: cell,
-	    content: state.doc.sheets[state.doc.activeSheet].data[cell.row][cell.col]
+	    cell: state.doc.sheets[state.doc.activeSheet].data[cell.row][cell.col]
 	  };
 	};
 	
@@ -41652,7 +41691,7 @@
 	    var _this = _possibleConstructorReturn(this, (CellInput.__proto__ || Object.getPrototypeOf(CellInput)).call(this, props));
 	
 	    _this.state = {
-	      content: props.content
+	      content: props.cell.content
 	    };
 	
 	    _this.cellChanged = _this.cellChanged.bind(_this);
@@ -41679,7 +41718,7 @@
 	    key: "render",
 	    value: function render() {
 	
-	      return _react2.default.createElement("input", { type: "text", onChange: this.cellChanged, value: this.props.content });
+	      return _react2.default.createElement("input", { type: "text", onChange: this.cellChanged, value: this.props.cell.content });
 	    }
 	  }]);
 	
@@ -41704,6 +41743,8 @@
 	
 	var _grid_header_cell2 = _interopRequireDefault(_grid_header_cell);
 	
+	var _sheet_actions = __webpack_require__(211);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var mapStateToProps = function mapStateToProps(state, ownProps) {
@@ -41716,7 +41757,14 @@
 	};
 	
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-	  return {};
+	  return {
+	    resizeRow: function resizeRow(rowId, height) {
+	      return dispatch((0, _sheet_actions.resizeRow)(rowId, height));
+	    },
+	    resizeCol: function resizeCol(colId, width) {
+	      return dispatch((0, _sheet_actions.resizeCol)(colId, width));
+	    }
+	  };
 	};
 	
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_grid_header_cell2.default);
@@ -41765,6 +41813,7 @@
 	    };
 	
 	    _this.headerResize = _this.headerResize.bind(_this);
+	    _this.resizeEnd = _this.resizeEnd.bind(_this);
 	    return _this;
 	  }
 	
@@ -41775,18 +41824,38 @@
 	
 	      if (this.props.col) {
 	        var width = e.clientX - offset.left;
-	        this.setState({ size: width });
-	        e.target.parentElement.style.width = width;
+	
+	        if (width > 0) {
+	          if (width < 25) width = 25;
+	
+	          this.setState({ size: width });
+	          e.target.parentElement.style.width = width;
+	        }
 	      } else {
 	        var height = e.clientY - offset.top;
-	        this.setState({ size: height });
-	        e.target.parentElement.style.height = height;
+	
+	        if (height > 0) {
+	          if (height < 26) height = 26;
+	
+	          this.setState({ size: height });
+	          e.target.parentElement.style.height = height;
+	        }
 	      }
 	    }
 	  }, {
 	    key: 'resizeEnd',
 	    value: function resizeEnd() {
-	      console.log("resize rows");
+	      var _props = this.props,
+	          rowId = _props.rowId,
+	          colId = _props.colId,
+	          resizeCol = _props.resizeCol,
+	          resizeRow = _props.resizeRow;
+	
+	      if (this.props.col) {
+	        resizeCol(colId, this.state.size);
+	      } else {
+	        resizeRow(rowId, this.state.size);
+	      }
 	    }
 	  }, {
 	    key: 'generateCellClass',
@@ -41795,10 +41864,10 @@
 	
 	      var startVal = this.props.selection.start;
 	      var endVal = this.props.selection.end;
-	      var _props = this.props,
-	          rowId = _props.rowId,
-	          colId = _props.colId,
-	          activeCell = _props.activeCell;
+	      var _props2 = this.props,
+	          rowId = _props2.rowId,
+	          colId = _props2.colId,
+	          activeCell = _props2.activeCell;
 	
 	
 	      if (activeCell.row === rowId || activeCell.col === colId || Util.between(rowId, startVal.row, endVal.row) || Util.between(colId, startVal.col, endVal.col)) {

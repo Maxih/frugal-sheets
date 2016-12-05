@@ -31,7 +31,11 @@ export function blankSheet() {
     for(let i = 0; i < grid.length; i++) {
       grid[i] = new Array(26);
       for(let j = 0; j < grid[i].length; j++) {
-        grid[i][j] = "";
+        grid[i][j] = {
+          content: "",
+          width: 100,
+          height: 26
+        };
       }
     }
 

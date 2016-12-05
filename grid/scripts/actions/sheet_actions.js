@@ -4,6 +4,8 @@ export const ADD_SHEET = "ADD_SHEET";
 export const RECEIVE_START_COORD = "RECEIVE_START_COORD";
 export const RECEIVE_END_COORD = "RECEIVE_END_COORD";
 export const SELECTING_TEMP_COORD = "SELECTING_TEMP_COORD";
+export const RESIZE_ROW = "RESIZE_ROW";
+export const RESIZE_COL = "RESIZE_COL";
 
 export const updateCell = (cell) => ({
   type: UPDATE_CELL,
@@ -36,4 +38,16 @@ export const receiveEndCoord = (coord) => ({
 export const tempEndCoord = (coord) => ({
   type: SELECTING_TEMP_COORD,
   end: coord
+});
+
+export const resizeRow = (rowId, height) => ({
+  type: RESIZE_ROW,
+  rowId,
+  height
+});
+
+export const resizeCol = (colId, width) => ({
+  type: RESIZE_COL,
+  colId,
+  width
 });

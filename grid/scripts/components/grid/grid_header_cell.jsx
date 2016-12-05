@@ -2,6 +2,7 @@ import React from 'react';
 import * as Util from '../../utils/grid_utils';
 
 
+
 export default class GridHeaderCell extends React.Component {
   constructor(props) {
     super(props);
@@ -12,6 +13,7 @@ export default class GridHeaderCell extends React.Component {
     }
 
     this.headerResize = this.headerResize.bind(this);
+    this.resizeEnd = this.resizeEnd.bind(this);
   }
 
   headerResize(e) {
@@ -19,17 +21,34 @@ export default class GridHeaderCell extends React.Component {
 
     if(this.props.col) {
       let width = e.clientX - offset.left;
-      this.setState({size: width});
-      e.target.parentElement.style.width = width;
+
+      if(width > 0) {
+        if(width < 25)
+          width = 25;
+
+        this.setState({size: width});
+        e.target.parentElement.style.width = width;
+      }
     } else {
       let height = e.clientY - offset.top;
-      this.setState({size: height});
-      e.target.parentElement.style.height = height;
+
+      if(height > 0) {
+        if(height < 26)
+          height = 26;
+
+        this.setState({size: height});
+        e.target.parentElement.style.height = height;
+      }
     }
   }
 
   resizeEnd() {
-    console.log("resize rows");
+    const {rowId, colId, resizeCol, resizeRow} = this.props;
+    if(this.props.col) {
+      resizeCol(colId, this.state.size);
+    } else {
+      resizeRow(rowId, this.state.size);
+    }
   }
 
   generateCellClass() {
