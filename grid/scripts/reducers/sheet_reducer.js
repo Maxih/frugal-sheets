@@ -1,9 +1,10 @@
 import * as Action from '../actions/sheet_actions.js';
-import {blankSheet} from '../utils/grid_utils';
+import {blankSheet, getCellsBetween, getRowFromId, getColFromId} from '../utils/grid_utils';
 import {merge} from 'lodash';
 
 const workingAreaDefaults = {
-  activeCell: { row: 0, col: 0, content: ""},
+  activeCell: { pos: {row: 0, col: 0}, content: ""},
+  activeRange: [],
   selecting: false,
   selection: {
     start: {},
@@ -42,26 +43,57 @@ function SheetReducer(state = defaults, action) {
       newState.activeSheet = action.name;
       return newState;
 
-    case Action.RECEIVE_START_COORD:
-      curWorkingArea.activeCell.col = action.start.col;
-      curWorkingArea.activeCell.row = action.start.row;
-      curWorkingArea.selection.start = action.start;
+    case Action.RECEIVE_START_CELL:
+
+      // Reset previously selected items to unselected
+      for(let i = 0; i < curWorkingArea.activeRange.length; i++)
+      {
+        for(let j = 0; j < curWorkingArea.activeRange[i].length; j++) {
+          const cell = curWorkingArea.activeRange[i][j];
+          curSheet.data[cell.pos.row][cell.pos.col].selected = false;
+        }
+      }
+
+      curWorkingArea.selecting = action.selecting;
+
+      curSheet.data[curWorkingArea.activeCell.pos.row][curWorkingArea.activeCell.pos.col].active = false;
+
+      curWorkingArea.activeCell = action.cell;
+      curWorkingArea.activeCell.active = true;
+
+      curSheet.data[action.cell.pos.row][action.cell.pos.col].active = true;
+
+      curWorkingArea.selection.start = action.cell.pos;
       curWorkingArea.selection.end = {};
-      curWorkingArea.selecting = action.selecting;
-      curWorkingArea.activeCell.content = action.content;
-      return newState;
-
-    case Action.RECEIVE_END_COORD:
-      curWorkingArea.selection.end = action.end;
-      curWorkingArea.selecting = action.selecting;
-
-      if(curWorkingArea.selection.end.row === curWorkingArea.selection.start.row && curWorkingArea.selection.end.col === curWorkingArea.selection.start.col)
-        curWorkingArea.selection = {start: {}, end: {}};
 
       return newState;
 
-    case Action.SELECTING_TEMP_COORD:
-      curWorkingArea.selection.end = action.end;
+
+    case Action.RECEIVE_END_CELL:
+      curWorkingArea.selecting = action.selecting;
+      curWorkingArea.selection.end = action.cell.pos;
+
+    case Action.SELECTING_TEMP_CELL:
+      curWorkingArea.selection.end = action.cell.pos;
+
+      // Reset previously selected items to unselected
+      for(let i = 0; i < curWorkingArea.activeRange.length; i++)
+      {
+        for(let j = 0; j < curWorkingArea.activeRange[i].length; j++) {
+          const cell = curWorkingArea.activeRange[i][j];
+          curSheet.data[cell.pos.row][cell.pos.col].selected = false;
+        }
+      }
+
+      curWorkingArea.activeRange = getCellsBetween(curSheet.data, curWorkingArea.selection.start, curWorkingArea.selection.end)
+
+      for(let i = 0; i < curWorkingArea.activeRange.length; i++)
+      {
+        for(let j = 0; j < curWorkingArea.activeRange[i].length; j++) {
+          const cell = curWorkingArea.activeRange[i][j];
+          curSheet.data[cell.pos.row][cell.pos.col].selected = true;
+        }
+      }
       return newState;
 
     case Action.RESIZE_COL:

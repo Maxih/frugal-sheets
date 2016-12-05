@@ -4,8 +4,6 @@ import Doc from './doc';
 
 const mapStateToProps = (state) => {
   return {
-    sheets: state.doc.sheets,
-    activeSheet: state.doc.activeSheet
   };
 };
 

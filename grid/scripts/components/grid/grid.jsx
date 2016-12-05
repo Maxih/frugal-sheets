@@ -35,6 +35,13 @@ export default class Grid extends React.Component {
     });
   }
 
+  shouldComponentUpdate(nextProps) {
+    if(this.props.activeSheet !== nextProps.activeSheet)
+      return true;
+
+    return false;
+  }
+
   rowHeads() {
     const rowHeads = new Array(this.props.grid.length);
     for(let i = 0; i < rowHeads.length; i++) {
@@ -57,7 +64,6 @@ export default class Grid extends React.Component {
         content: numToChar(i+1),
         size: this.props.grid[0][i].width
       }
-      console.log(head.size);
       columnHeads[i] = head;
     }
 
@@ -65,6 +71,7 @@ export default class Grid extends React.Component {
   }
 
   render() {
+
     const rows = this.props.grid.map((row, idx) => {
       return (
         <GridRow key={idx} rowId={idx} row={row} />

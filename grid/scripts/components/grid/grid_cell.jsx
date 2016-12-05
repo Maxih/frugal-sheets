@@ -22,23 +22,35 @@ export default class GridCell extends React.Component {
     }
   }
 
+  shouldComponentUpdate(nextProps) {
+    if(
+      (this.props.cell.content !== nextProps.cell.content) ||
+      (this.props.cell.width !== nextProps.cell.width) ||
+      (this.props.cell.height !== nextProps.cell.height) ||
+      (this.props.cell.selected !== nextProps.cell.selected) ||
+      (this.props.cell.active !== nextProps.cell.active))
+      return true;
+
+    return false
+  }
+
   mouseAction(e) {
     const {rowId, colId} = this.props;
-    const {receiveStartCoord, receiveEndCoord} = this.props;
+    const {receiveStartCell, receiveEndCell} = this.props;
 
     if(e.type === "mouseup") {
-      receiveEndCoord({row:rowId, col:colId})
+      receiveEndCell(this.props.cell)
     } else {
-      receiveStartCoord({coord: {row:rowId, col:colId}, content:this.state.content})
+      receiveStartCell(this.props.cell)
     }
   }
 
   mouseOver() {
-    const {rowId, colId, tempEndCoord} = this.props;
+    const {rowId, colId, tempEndCell} = this.props;
 
     if(this.props.selecting) {
 
-      tempEndCoord({row:rowId, col:colId});
+      tempEndCell(this.props.cell);
     }
 
   }
@@ -52,39 +64,30 @@ export default class GridCell extends React.Component {
       row: rowId
     }
 
-
     updateCell(cell);
-
-
-
   }
 
   generateCellClass() {
     let className = "grid-cell";
 
-    const startVal = this.props.selection.start;
-    const endVal = this.props.selection.end;
-    const {rowId, colId, activeCell} = this.props;
+    // if(!(startVal.row === endVal.row && startVal.col === endVal.col))
+    //   if(Util.cellInSelection(rowId, colId, startVal, endVal))
+    //     className += " active-cell";
 
-    if(!(startVal.row === endVal.row && startVal.col === endVal.col))
-      if(Util.cellInSelection(rowId, colId, startVal, endVal))
-        className += " active-cell";
+    if(this.props.cell.selected) {
+      className += " active-cell";
+    }
 
-    if(this.isSelectedCell())
+    if(this.props.cell.active)
       className += " selected-cell";
 
       return className;
   }
 
-  isSelectedCell() {
-    const {rowId, colId, activeCell} = this.props;
-    return (rowId === activeCell.row && colId === activeCell.col)
-  }
-
   render() {
     let content = this.props.cell.content;
 
-    if(this.isSelectedCell()) {
+    if(this.props.cell.active) {
       content = (
         <textarea ref="cellTextArea" onChange={this.cellChanged} value={content} />
       );

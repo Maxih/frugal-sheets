@@ -7,7 +7,7 @@ const mapStateToProps = (state) => {
 
   return {
     activeCell: cell,
-    cell: state.doc.sheets[state.doc.activeSheet].data[cell.row][cell.col]
+    cell: state.doc.sheets[state.doc.activeSheet].data[cell.pos.row][cell.pos.col]
   };
 };
 

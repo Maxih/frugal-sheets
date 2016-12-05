@@ -1,9 +1,9 @@
 export const UPDATE_CELL = "UPDATE_CELL";
 export const CHANGE_ACTIVE_SHEET = "CHANGE_ACTIVE_SHEET";
 export const ADD_SHEET = "ADD_SHEET";
-export const RECEIVE_START_COORD = "RECEIVE_START_COORD";
-export const RECEIVE_END_COORD = "RECEIVE_END_COORD";
-export const SELECTING_TEMP_COORD = "SELECTING_TEMP_COORD";
+export const RECEIVE_START_CELL = "RECEIVE_START_CELL";
+export const RECEIVE_END_CELL = "RECEIVE_END_CELL";
+export const SELECTING_TEMP_CELL = "SELECTING_TEMP_CELL";
 export const RESIZE_ROW = "RESIZE_ROW";
 export const RESIZE_COL = "RESIZE_COL";
 
@@ -22,22 +22,21 @@ export const addSheet = (sheetName) => ({
   name: sheetName
 });
 
-export const receiveStartCoord = (cell) => ({
-  type: RECEIVE_START_COORD,
-  start: cell.coord,
-  content: cell.content,
+export const receiveStartCell = (cell) => ({
+  type: RECEIVE_START_CELL,
+  cell: cell,
   selecting: true
 });
 
-export const receiveEndCoord = (coord) => ({
-  type: RECEIVE_END_COORD,
-  end: coord,
+export const receiveEndCell = (cell) => ({
+  type: RECEIVE_END_CELL,
+  cell: cell,
   selecting: false
 });
 
-export const tempEndCoord = (coord) => ({
-  type: SELECTING_TEMP_COORD,
-  end: coord
+export const tempEndCell = (cell) => ({
+  type: SELECTING_TEMP_CELL,
+  cell: cell
 });
 
 export const resizeRow = (rowId, height) => ({

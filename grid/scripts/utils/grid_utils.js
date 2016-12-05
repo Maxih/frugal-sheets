@@ -1,3 +1,40 @@
+export function getRowFromId(gridState, id) {
+
+  return gridState[id];
+}
+
+export function getColFromId(gridState, id) {
+  const col = [];
+
+  for(let i = 0; i < gridState.length; i++) {
+    col.push(gridState[i][id]);
+  }
+
+  return col;
+}
+
+export function getCellsBetween(gridState, start, end) {
+  const upperBoundsCol = start.col > end.col ? start.col : end.col;
+  const lowerBoundsCol = start.col < end.col ? start.col : end.col;
+
+  const upperBoundsRow = start.row > end.row ? start.row : end.row;
+  const lowerBoundsRow = start.row < end.row ? start.row : end.row;
+
+  const cells = [];
+
+  for(let i = lowerBoundsRow; i <= upperBoundsRow; i++) {
+    const row = [];
+
+    for(let j = lowerBoundsCol; j <= upperBoundsCol; j++) {
+      row.push(gridState[i][j]);
+    }
+
+    cells.push(row);
+  }
+
+  return cells;
+}
+
 export function cellInSelection(rowId, colId, startVal, endVal) {
   return between(colId, startVal.col, endVal.col) && between(rowId, startVal.row, endVal.row)
 }
@@ -34,10 +71,18 @@ export function blankSheet() {
         grid[i][j] = {
           content: "",
           width: 100,
-          height: 26
+          height: 26,
+          selected: false,
+          active: false,
+          pos: {
+            row: i,
+            col: j
+          }
         };
       }
     }
+
+    grid[0][0].active = true;
 
     return grid;
   }

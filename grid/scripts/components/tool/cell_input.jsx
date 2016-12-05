@@ -24,7 +24,6 @@ export default class CellInput extends React.Component {
   }
 
   render() {
-
     return (
       <input type="text" onChange={this.cellChanged} value={this.props.cell.content} />
     );

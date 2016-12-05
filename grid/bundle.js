@@ -58,7 +58,7 @@
 	
 	var _root2 = _interopRequireDefault(_root);
 	
-	var _store = __webpack_require__(226);
+	var _store = __webpack_require__(229);
 	
 	var _store2 = _interopRequireDefault(_store);
 	
@@ -23273,19 +23273,16 @@
 	
 	var _reactRedux = __webpack_require__(179);
 	
-	var _sheet_actions = __webpack_require__(211);
+	var _sheet_actions = __webpack_require__(210);
 	
-	var _doc = __webpack_require__(212);
+	var _doc = __webpack_require__(211);
 	
 	var _doc2 = _interopRequireDefault(_doc);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var mapStateToProps = function mapStateToProps(state) {
-	  return {
-	    sheets: state.doc.sheets,
-	    activeSheet: state.doc.activeSheet
-	  };
+	  return {};
 	};
 	
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
@@ -23295,8 +23292,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_doc2.default);
 
 /***/ },
-/* 210 */,
-/* 211 */
+/* 210 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -23307,9 +23303,9 @@
 	var UPDATE_CELL = exports.UPDATE_CELL = "UPDATE_CELL";
 	var CHANGE_ACTIVE_SHEET = exports.CHANGE_ACTIVE_SHEET = "CHANGE_ACTIVE_SHEET";
 	var ADD_SHEET = exports.ADD_SHEET = "ADD_SHEET";
-	var RECEIVE_START_COORD = exports.RECEIVE_START_COORD = "RECEIVE_START_COORD";
-	var RECEIVE_END_COORD = exports.RECEIVE_END_COORD = "RECEIVE_END_COORD";
-	var SELECTING_TEMP_COORD = exports.SELECTING_TEMP_COORD = "SELECTING_TEMP_COORD";
+	var RECEIVE_START_CELL = exports.RECEIVE_START_CELL = "RECEIVE_START_CELL";
+	var RECEIVE_END_CELL = exports.RECEIVE_END_CELL = "RECEIVE_END_CELL";
+	var SELECTING_TEMP_CELL = exports.SELECTING_TEMP_CELL = "SELECTING_TEMP_CELL";
 	var RESIZE_ROW = exports.RESIZE_ROW = "RESIZE_ROW";
 	var RESIZE_COL = exports.RESIZE_COL = "RESIZE_COL";
 	
@@ -23334,27 +23330,26 @@
 	  };
 	};
 	
-	var receiveStartCoord = exports.receiveStartCoord = function receiveStartCoord(cell) {
+	var receiveStartCell = exports.receiveStartCell = function receiveStartCell(cell) {
 	  return {
-	    type: RECEIVE_START_COORD,
-	    start: cell.coord,
-	    content: cell.content,
+	    type: RECEIVE_START_CELL,
+	    cell: cell,
 	    selecting: true
 	  };
 	};
 	
-	var receiveEndCoord = exports.receiveEndCoord = function receiveEndCoord(coord) {
+	var receiveEndCell = exports.receiveEndCell = function receiveEndCell(cell) {
 	  return {
-	    type: RECEIVE_END_COORD,
-	    end: coord,
+	    type: RECEIVE_END_CELL,
+	    cell: cell,
 	    selecting: false
 	  };
 	};
 	
-	var tempEndCoord = exports.tempEndCoord = function tempEndCoord(coord) {
+	var tempEndCell = exports.tempEndCell = function tempEndCell(cell) {
 	  return {
-	    type: SELECTING_TEMP_COORD,
-	    end: coord
+	    type: SELECTING_TEMP_CELL,
+	    cell: cell
 	  };
 	};
 	
@@ -23375,7 +23370,7 @@
 	};
 
 /***/ },
-/* 212 */
+/* 211 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -23390,15 +23385,15 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _grid_container = __webpack_require__(213);
+	var _grid_container = __webpack_require__(212);
 	
 	var _grid_container2 = _interopRequireDefault(_grid_container);
 	
-	var _sheet_nav_container = __webpack_require__(220);
+	var _sheet_nav_container = __webpack_require__(221);
 	
 	var _sheet_nav_container2 = _interopRequireDefault(_sheet_nav_container);
 	
-	var _doc_editor_container = __webpack_require__(222);
+	var _doc_editor_container = __webpack_require__(223);
 	
 	var _doc_editor_container2 = _interopRequireDefault(_doc_editor_container);
 	
@@ -23413,16 +23408,15 @@
 	var Doc = function (_React$Component) {
 	  _inherits(Doc, _React$Component);
 	
-	  function Doc(props) {
+	  function Doc() {
 	    _classCallCheck(this, Doc);
 	
-	    return _possibleConstructorReturn(this, (Doc.__proto__ || Object.getPrototypeOf(Doc)).call(this, props));
+	    return _possibleConstructorReturn(this, (Doc.__proto__ || Object.getPrototypeOf(Doc)).apply(this, arguments));
 	  }
 	
 	  _createClass(Doc, [{
 	    key: 'render',
 	    value: function render() {
-	
 	      return _react2.default.createElement(
 	        'section',
 	        { className: 'doc-wrapper' },
@@ -23451,7 +23445,7 @@
 	exports.default = Doc;
 
 /***/ },
-/* 213 */
+/* 212 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -23462,7 +23456,7 @@
 	
 	var _reactRedux = __webpack_require__(179);
 	
-	var _grid = __webpack_require__(214);
+	var _grid = __webpack_require__(213);
 	
 	var _grid2 = _interopRequireDefault(_grid);
 	
@@ -23470,7 +23464,8 @@
 	
 	var mapStateToProps = function mapStateToProps(state) {
 	  return {
-	    grid: state.doc.sheets[state.doc.activeSheet].data
+	    grid: state.doc.sheets[state.doc.activeSheet].data,
+	    activeSheet: state.doc.activeSheet
 	  };
 	};
 	// import {  } from '../../actions/sheet_actions';
@@ -23483,7 +23478,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_grid2.default);
 
 /***/ },
-/* 214 */
+/* 213 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -23498,13 +23493,13 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _grid_utils = __webpack_require__(215);
+	var _grid_utils = __webpack_require__(214);
 	
-	var _grid_row = __webpack_require__(216);
+	var _grid_row = __webpack_require__(215);
 	
 	var _grid_row2 = _interopRequireDefault(_grid_row);
 	
-	var _grid_header = __webpack_require__(219);
+	var _grid_header = __webpack_require__(218);
 	
 	var _grid_header2 = _interopRequireDefault(_grid_header);
 	
@@ -23552,6 +23547,13 @@
 	      });
 	    }
 	  }, {
+	    key: 'shouldComponentUpdate',
+	    value: function shouldComponentUpdate(nextProps) {
+	      if (this.props.activeSheet !== nextProps.activeSheet) return true;
+	
+	      return false;
+	    }
+	  }, {
 	    key: 'rowHeads',
 	    value: function rowHeads() {
 	      var rowHeads = new Array(this.props.grid.length);
@@ -23576,7 +23578,6 @@
 	          content: (0, _grid_utils.numToChar)(i + 1),
 	          size: this.props.grid[0][i].width
 	        };
-	        console.log(head.size);
 	        columnHeads[i] = head;
 	      }
 	
@@ -23585,6 +23586,7 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
+	
 	      var rows = this.props.grid.map(function (row, idx) {
 	        return _react2.default.createElement(_grid_row2.default, { key: idx, rowId: idx, row: row });
 	      });
@@ -23618,7 +23620,7 @@
 	exports.default = Grid;
 
 /***/ },
-/* 215 */
+/* 214 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -23626,10 +23628,50 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	exports.getRowFromId = getRowFromId;
+	exports.getColFromId = getColFromId;
+	exports.getCellsBetween = getCellsBetween;
 	exports.cellInSelection = cellInSelection;
 	exports.between = between;
 	exports.newSheetName = newSheetName;
 	exports.blankSheet = blankSheet;
+	function getRowFromId(gridState, id) {
+	
+	  return gridState[id];
+	}
+	
+	function getColFromId(gridState, id) {
+	  var col = [];
+	
+	  for (var i = 0; i < gridState.length; i++) {
+	    col.push(gridState[i][id]);
+	  }
+	
+	  return col;
+	}
+	
+	function getCellsBetween(gridState, start, end) {
+	  var upperBoundsCol = start.col > end.col ? start.col : end.col;
+	  var lowerBoundsCol = start.col < end.col ? start.col : end.col;
+	
+	  var upperBoundsRow = start.row > end.row ? start.row : end.row;
+	  var lowerBoundsRow = start.row < end.row ? start.row : end.row;
+	
+	  var cells = [];
+	
+	  for (var i = lowerBoundsRow; i <= upperBoundsRow; i++) {
+	    var row = [];
+	
+	    for (var j = lowerBoundsCol; j <= upperBoundsCol; j++) {
+	      row.push(gridState[i][j]);
+	    }
+	
+	    cells.push(row);
+	  }
+	
+	  return cells;
+	}
+	
 	function cellInSelection(rowId, colId, startVal, endVal) {
 	  return between(colId, startVal.col, endVal.col) && between(rowId, startVal.row, endVal.row);
 	}
@@ -23664,10 +23706,18 @@
 	      grid[i][j] = {
 	        content: "",
 	        width: 100,
-	        height: 26
+	        height: 26,
+	        selected: false,
+	        active: false,
+	        pos: {
+	          row: i,
+	          col: j
+	        }
 	      };
 	    }
 	  }
+	
+	  grid[0][0].active = true;
 	
 	  return grid;
 	}
@@ -23702,7 +23752,7 @@
 	};
 
 /***/ },
-/* 216 */
+/* 215 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -23717,7 +23767,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _grid_cell_container = __webpack_require__(217);
+	var _grid_cell_container = __webpack_require__(216);
 	
 	var _grid_cell_container2 = _interopRequireDefault(_grid_cell_container);
 	
@@ -23761,7 +23811,7 @@
 	exports.default = GridRow;
 
 /***/ },
-/* 217 */
+/* 216 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -23772,9 +23822,9 @@
 	
 	var _reactRedux = __webpack_require__(179);
 	
-	var _sheet_actions = __webpack_require__(211);
+	var _sheet_actions = __webpack_require__(210);
 	
-	var _grid_cell = __webpack_require__(218);
+	var _grid_cell = __webpack_require__(217);
 	
 	var _grid_cell2 = _interopRequireDefault(_grid_cell);
 	
@@ -23784,22 +23834,20 @@
 	
 	  return {
 	    selecting: state.doc.sheets[state.doc.activeSheet].workingArea.selecting,
-	    selection: state.doc.sheets[state.doc.activeSheet].workingArea.selection,
-	    activeCell: state.doc.sheets[state.doc.activeSheet].workingArea.activeCell,
 	    cell: state.doc.sheets[state.doc.activeSheet].data[ownProps.rowId][ownProps.colId]
 	  };
 	};
 	
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 	  return {
-	    receiveStartCoord: function receiveStartCoord(coord) {
-	      return dispatch((0, _sheet_actions.receiveStartCoord)(coord));
+	    receiveStartCell: function receiveStartCell(cell) {
+	      return dispatch((0, _sheet_actions.receiveStartCell)(cell));
 	    },
-	    receiveEndCoord: function receiveEndCoord(coord) {
-	      return dispatch((0, _sheet_actions.receiveEndCoord)(coord));
+	    receiveEndCell: function receiveEndCell(cell) {
+	      return dispatch((0, _sheet_actions.receiveEndCell)(cell));
 	    },
-	    tempEndCoord: function tempEndCoord(coord) {
-	      return dispatch((0, _sheet_actions.tempEndCoord)(coord));
+	    tempEndCell: function tempEndCell(cell) {
+	      return dispatch((0, _sheet_actions.tempEndCell)(cell));
 	    },
 	    updateCell: function updateCell(cell) {
 	      return dispatch((0, _sheet_actions.updateCell)(cell));
@@ -23810,7 +23858,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_grid_cell2.default);
 
 /***/ },
-/* 218 */
+/* 217 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -23829,7 +23877,7 @@
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
-	var _grid_utils = __webpack_require__(215);
+	var _grid_utils = __webpack_require__(214);
 	
 	var Util = _interopRequireWildcard(_grid_utils);
 	
@@ -23869,20 +23917,27 @@
 	      }
 	    }
 	  }, {
+	    key: 'shouldComponentUpdate',
+	    value: function shouldComponentUpdate(nextProps) {
+	      if (this.props.cell.content !== nextProps.cell.content || this.props.cell.width !== nextProps.cell.width || this.props.cell.height !== nextProps.cell.height || this.props.cell.selected !== nextProps.cell.selected || this.props.cell.active !== nextProps.cell.active) return true;
+	
+	      return false;
+	    }
+	  }, {
 	    key: 'mouseAction',
 	    value: function mouseAction(e) {
 	      var _props = this.props,
 	          rowId = _props.rowId,
 	          colId = _props.colId;
 	      var _props2 = this.props,
-	          receiveStartCoord = _props2.receiveStartCoord,
-	          receiveEndCoord = _props2.receiveEndCoord;
+	          receiveStartCell = _props2.receiveStartCell,
+	          receiveEndCell = _props2.receiveEndCell;
 	
 	
 	      if (e.type === "mouseup") {
-	        receiveEndCoord({ row: rowId, col: colId });
+	        receiveEndCell(this.props.cell);
 	      } else {
-	        receiveStartCoord({ coord: { row: rowId, col: colId }, content: this.state.content });
+	        receiveStartCell(this.props.cell);
 	      }
 	    }
 	  }, {
@@ -23891,12 +23946,12 @@
 	      var _props3 = this.props,
 	          rowId = _props3.rowId,
 	          colId = _props3.colId,
-	          tempEndCoord = _props3.tempEndCoord;
+	          tempEndCell = _props3.tempEndCell;
 	
 	
 	      if (this.props.selecting) {
 	
-	        tempEndCoord({ row: rowId, col: colId });
+	        tempEndCell(this.props.cell);
 	      }
 	    }
 	  }, {
@@ -23921,36 +23976,24 @@
 	    value: function generateCellClass() {
 	      var className = "grid-cell";
 	
-	      var startVal = this.props.selection.start;
-	      var endVal = this.props.selection.end;
-	      var _props5 = this.props,
-	          rowId = _props5.rowId,
-	          colId = _props5.colId,
-	          activeCell = _props5.activeCell;
+	      // if(!(startVal.row === endVal.row && startVal.col === endVal.col))
+	      //   if(Util.cellInSelection(rowId, colId, startVal, endVal))
+	      //     className += " active-cell";
 	
+	      if (this.props.cell.selected) {
+	        className += " active-cell";
+	      }
 	
-	      if (!(startVal.row === endVal.row && startVal.col === endVal.col)) if (Util.cellInSelection(rowId, colId, startVal, endVal)) className += " active-cell";
-	
-	      if (this.isSelectedCell()) className += " selected-cell";
+	      if (this.props.cell.active) className += " selected-cell";
 	
 	      return className;
-	    }
-	  }, {
-	    key: 'isSelectedCell',
-	    value: function isSelectedCell() {
-	      var _props6 = this.props,
-	          rowId = _props6.rowId,
-	          colId = _props6.colId,
-	          activeCell = _props6.activeCell;
-	
-	      return rowId === activeCell.row && colId === activeCell.col;
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var content = this.props.cell.content;
 	
-	      if (this.isSelectedCell()) {
+	      if (this.props.cell.active) {
 	        content = _react2.default.createElement('textarea', { ref: 'cellTextArea', onChange: this.cellChanged, value: content });
 	      }
 	
@@ -23979,7 +24022,7 @@
 	exports.default = GridCell;
 
 /***/ },
-/* 219 */
+/* 218 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -23994,7 +24037,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _grid_header_cell_container = __webpack_require__(233);
+	var _grid_header_cell_container = __webpack_require__(219);
 	
 	var _grid_header_cell_container2 = _interopRequireDefault(_grid_header_cell_container);
 	
@@ -24020,9 +24063,7 @@
 	    value: function render() {
 	      var _this2 = this;
 	
-	      console.log("rendered");
 	      var cells = this.props.row.map(function (cell, idx) {
-	        console.log(cell);
 	        if (!_this2.props.col) {
 	          return _react2.default.createElement(_grid_header_cell_container2.default, {
 	            key: idx,
@@ -24056,7 +24097,7 @@
 	exports.default = GridHeader;
 
 /***/ },
-/* 220 */
+/* 219 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24067,9 +24108,188 @@
 	
 	var _reactRedux = __webpack_require__(179);
 	
-	var _sheet_actions = __webpack_require__(211);
+	var _grid_header_cell = __webpack_require__(220);
 	
-	var _sheet_nav = __webpack_require__(221);
+	var _grid_header_cell2 = _interopRequireDefault(_grid_header_cell);
+	
+	var _sheet_actions = __webpack_require__(210);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var mapStateToProps = function mapStateToProps(state, ownProps) {
+	
+	  var curContent = ownProps.rowId === "" || ownProps.colId === "" ? ownProps.headerVal : state.doc.sheets[state.doc.activeSheet].data[ownProps.rowId][ownProps.colId];
+	  return {
+	    selection: state.doc.sheets[state.doc.activeSheet].workingArea.selection,
+	    activeCell: state.doc.sheets[state.doc.activeSheet].workingArea.activeCell,
+	    activeSheet: state.doc.activeSheet
+	  };
+	};
+	
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	  return {
+	    resizeRow: function resizeRow(rowId, height) {
+	      return dispatch((0, _sheet_actions.resizeRow)(rowId, height));
+	    },
+	    resizeCol: function resizeCol(colId, width) {
+	      return dispatch((0, _sheet_actions.resizeCol)(colId, width));
+	    }
+	  };
+	};
+	
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_grid_header_cell2.default);
+
+/***/ },
+/* 220 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _grid_utils = __webpack_require__(214);
+	
+	var Util = _interopRequireWildcard(_grid_utils);
+	
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var GridHeaderCell = function (_React$Component) {
+	  _inherits(GridHeaderCell, _React$Component);
+	
+	  function GridHeaderCell(props) {
+	    _classCallCheck(this, GridHeaderCell);
+	
+	    var _this = _possibleConstructorReturn(this, (GridHeaderCell.__proto__ || Object.getPrototypeOf(GridHeaderCell)).call(this, props));
+	
+	    _this.state = {
+	      content: props.cell.content,
+	      size: props.cell.size
+	    };
+	
+	    _this.headerResize = _this.headerResize.bind(_this);
+	    _this.resizeEnd = _this.resizeEnd.bind(_this);
+	    return _this;
+	  }
+	
+	  _createClass(GridHeaderCell, [{
+	    key: 'headerResize',
+	    value: function headerResize(e) {
+	      var offset = $(e.target.parentElement).offset();
+	
+	      if (this.props.col) {
+	        var width = e.clientX - offset.left;
+	
+	        if (width > 0) {
+	          if (width < 25) width = 25;
+	
+	          this.setState({ size: width });
+	          e.target.parentElement.style.width = width;
+	        }
+	      } else {
+	        var height = e.clientY - offset.top;
+	
+	        if (height > 0) {
+	          if (height < 26) height = 26;
+	
+	          this.setState({ size: height });
+	          e.target.parentElement.style.height = height;
+	        }
+	      }
+	    }
+	  }, {
+	    key: 'resizeEnd',
+	    value: function resizeEnd() {
+	      var _props = this.props,
+	          rowId = _props.rowId,
+	          colId = _props.colId,
+	          resizeCol = _props.resizeCol,
+	          resizeRow = _props.resizeRow;
+	
+	      if (this.props.col) {
+	        resizeCol(colId, this.state.size);
+	      } else {
+	        resizeRow(rowId, this.state.size);
+	      }
+	    }
+	  }, {
+	    key: 'generateCellClass',
+	    value: function generateCellClass() {
+	      var className = "grid-cell";
+	
+	      var startVal = this.props.selection.start;
+	      var endVal = this.props.selection.end;
+	      var _props2 = this.props,
+	          rowId = _props2.rowId,
+	          colId = _props2.colId,
+	          activeCell = _props2.activeCell;
+	
+	
+	      if (activeCell.row === rowId || activeCell.col === colId || Util.between(rowId, startVal.row, endVal.row) || Util.between(colId, startVal.col, endVal.col)) {
+	        className += " active-cell";
+	      }
+	
+	      return className;
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	
+	      var style = {};
+	
+	      if (this.props.col) {
+	        style.width = this.props.cell.size;
+	      } else {
+	        style.height = this.props.cell.size;
+	      }
+	
+	      return _react2.default.createElement(
+	        'span',
+	        {
+	          className: this.generateCellClass(),
+	          style: style
+	        },
+	        this.state.content,
+	        _react2.default.createElement('span', { draggable: 'true', onDrag: this.headerResize, onDragEnd: this.resizeEnd, className: 'resizer' })
+	      );
+	    }
+	  }]);
+	
+	  return GridHeaderCell;
+	}(_react2.default.Component);
+	
+	exports.default = GridHeaderCell;
+
+/***/ },
+/* 221 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _reactRedux = __webpack_require__(179);
+	
+	var _sheet_actions = __webpack_require__(210);
+	
+	var _sheet_nav = __webpack_require__(222);
 	
 	var _sheet_nav2 = _interopRequireDefault(_sheet_nav);
 	
@@ -24096,7 +24316,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_sheet_nav2.default);
 
 /***/ },
-/* 221 */
+/* 222 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24111,7 +24331,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _grid_utils = __webpack_require__(215);
+	var _grid_utils = __webpack_require__(214);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -24188,7 +24408,7 @@
 	exports.default = SheetNav;
 
 /***/ },
-/* 222 */
+/* 223 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24199,7 +24419,7 @@
 	
 	var _reactRedux = __webpack_require__(179);
 	
-	var _doc_editor = __webpack_require__(223);
+	var _doc_editor = __webpack_require__(224);
 	
 	var _doc_editor2 = _interopRequireDefault(_doc_editor);
 	
@@ -24218,7 +24438,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_doc_editor2.default);
 
 /***/ },
-/* 223 */
+/* 224 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24233,7 +24453,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _content_tool_container = __webpack_require__(224);
+	var _content_tool_container = __webpack_require__(225);
 	
 	var _content_tool_container2 = _interopRequireDefault(_content_tool_container);
 	
@@ -24271,7 +24491,7 @@
 	exports.default = DocEditor;
 
 /***/ },
-/* 224 */
+/* 225 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24282,9 +24502,9 @@
 	
 	var _reactRedux = __webpack_require__(179);
 	
-	var _sheet_actions = __webpack_require__(211);
+	var _sheet_actions = __webpack_require__(210);
 	
-	var _content_tool = __webpack_require__(225);
+	var _content_tool = __webpack_require__(226);
 	
 	var _content_tool2 = _interopRequireDefault(_content_tool);
 	
@@ -24305,7 +24525,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_content_tool2.default);
 
 /***/ },
-/* 225 */
+/* 226 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24320,7 +24540,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _cell_input_container = __webpack_require__(231);
+	var _cell_input_container = __webpack_require__(227);
 	
 	var _cell_input_container2 = _interopRequireDefault(_cell_input_container);
 	
@@ -24372,7 +24592,114 @@
 	exports.default = ContentTool;
 
 /***/ },
-/* 226 */
+/* 227 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _reactRedux = __webpack_require__(179);
+	
+	var _sheet_actions = __webpack_require__(210);
+	
+	var _cell_input = __webpack_require__(228);
+	
+	var _cell_input2 = _interopRequireDefault(_cell_input);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var mapStateToProps = function mapStateToProps(state) {
+	  var cell = state.doc.sheets[state.doc.activeSheet].workingArea.activeCell;
+	
+	  return {
+	    activeCell: cell,
+	    cell: state.doc.sheets[state.doc.activeSheet].data[cell.pos.row][cell.pos.col]
+	  };
+	};
+	
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	  return {
+	    updateCell: function updateCell(cell) {
+	      return dispatch((0, _sheet_actions.updateCell)(cell));
+	    }
+	  };
+	};
+	
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_cell_input2.default);
+
+/***/ },
+/* 228 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var CellInput = function (_React$Component) {
+	  _inherits(CellInput, _React$Component);
+	
+	  function CellInput(props) {
+	    _classCallCheck(this, CellInput);
+	
+	    var _this = _possibleConstructorReturn(this, (CellInput.__proto__ || Object.getPrototypeOf(CellInput)).call(this, props));
+	
+	    _this.state = {
+	      content: props.cell.content
+	    };
+	
+	    _this.cellChanged = _this.cellChanged.bind(_this);
+	    return _this;
+	  }
+	
+	  _createClass(CellInput, [{
+	    key: "cellChanged",
+	    value: function cellChanged(e) {
+	      this.setState({ content: e.target.value });
+	      var _props = this.props,
+	          activeCell = _props.activeCell,
+	          updateCell = _props.updateCell;
+	
+	      var cell = {
+	        content: e.target.value,
+	        col: activeCell.col,
+	        row: activeCell.row
+	      };
+	
+	      updateCell(cell);
+	    }
+	  }, {
+	    key: "render",
+	    value: function render() {
+	      return _react2.default.createElement("input", { type: "text", onChange: this.cellChanged, value: this.props.cell.content });
+	    }
+	  }]);
+	
+	  return CellInput;
+	}(_react2.default.Component);
+	
+	exports.default = CellInput;
+
+/***/ },
+/* 229 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24383,11 +24710,11 @@
 	
 	var _redux = __webpack_require__(186);
 	
-	var _root_reducer = __webpack_require__(227);
+	var _root_reducer = __webpack_require__(230);
 	
 	var _root_reducer2 = _interopRequireDefault(_root_reducer);
 	
-	var _reduxThunk = __webpack_require__(230);
+	var _reduxThunk = __webpack_require__(233);
 	
 	var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
 	
@@ -24402,7 +24729,7 @@
 	exports.default = configureStore;
 
 /***/ },
-/* 227 */
+/* 230 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24413,7 +24740,7 @@
 	
 	var _redux = __webpack_require__(186);
 	
-	var _sheet_reducer = __webpack_require__(228);
+	var _sheet_reducer = __webpack_require__(231);
 	
 	var _sheet_reducer2 = _interopRequireDefault(_sheet_reducer);
 	
@@ -24426,7 +24753,7 @@
 	exports.default = rootReducer;
 
 /***/ },
-/* 228 */
+/* 231 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24435,18 +24762,19 @@
 	  value: true
 	});
 	
-	var _sheet_actions = __webpack_require__(211);
+	var _sheet_actions = __webpack_require__(210);
 	
 	var Action = _interopRequireWildcard(_sheet_actions);
 	
-	var _grid_utils = __webpack_require__(215);
+	var _grid_utils = __webpack_require__(214);
 	
-	var _lodash = __webpack_require__(229);
+	var _lodash = __webpack_require__(232);
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
 	var workingAreaDefaults = {
-	  activeCell: { row: 0, col: 0, content: "" },
+	  activeCell: { pos: { row: 0, col: 0 }, content: "" },
+	  activeRange: [],
 	  selecting: false,
 	  selection: {
 	    start: {},
@@ -24488,37 +24816,65 @@
 	      newState.activeSheet = action.name;
 	      return newState;
 	
-	    case Action.RECEIVE_START_COORD:
-	      curWorkingArea.activeCell.col = action.start.col;
-	      curWorkingArea.activeCell.row = action.start.row;
-	      curWorkingArea.selection.start = action.start;
+	    case Action.RECEIVE_START_CELL:
+	
+	      // Reset previously selected items to unselected
+	      for (var i = 0; i < curWorkingArea.activeRange.length; i++) {
+	        for (var j = 0; j < curWorkingArea.activeRange[i].length; j++) {
+	          var _cell = curWorkingArea.activeRange[i][j];
+	          curSheet.data[_cell.pos.row][_cell.pos.col].selected = false;
+	        }
+	      }
+	
+	      curWorkingArea.selecting = action.selecting;
+	
+	      curSheet.data[curWorkingArea.activeCell.pos.row][curWorkingArea.activeCell.pos.col].active = false;
+	
+	      curWorkingArea.activeCell = action.cell;
+	      curWorkingArea.activeCell.active = true;
+	
+	      curSheet.data[action.cell.pos.row][action.cell.pos.col].active = true;
+	
+	      curWorkingArea.selection.start = action.cell.pos;
 	      curWorkingArea.selection.end = {};
-	      curWorkingArea.selecting = action.selecting;
-	      curWorkingArea.activeCell.content = action.content;
-	      return newState;
-	
-	    case Action.RECEIVE_END_COORD:
-	      curWorkingArea.selection.end = action.end;
-	      curWorkingArea.selecting = action.selecting;
-	
-	      if (curWorkingArea.selection.end.row === curWorkingArea.selection.start.row && curWorkingArea.selection.end.col === curWorkingArea.selection.start.col) curWorkingArea.selection = { start: {}, end: {} };
 	
 	      return newState;
 	
-	    case Action.SELECTING_TEMP_COORD:
-	      curWorkingArea.selection.end = action.end;
+	    case Action.RECEIVE_END_CELL:
+	      curWorkingArea.selecting = action.selecting;
+	      curWorkingArea.selection.end = action.cell.pos;
+	
+	    case Action.SELECTING_TEMP_CELL:
+	      curWorkingArea.selection.end = action.cell.pos;
+	
+	      // Reset previously selected items to unselected
+	      for (var _i = 0; _i < curWorkingArea.activeRange.length; _i++) {
+	        for (var _j = 0; _j < curWorkingArea.activeRange[_i].length; _j++) {
+	          var _cell2 = curWorkingArea.activeRange[_i][_j];
+	          curSheet.data[_cell2.pos.row][_cell2.pos.col].selected = false;
+	        }
+	      }
+	
+	      curWorkingArea.activeRange = (0, _grid_utils.getCellsBetween)(curSheet.data, curWorkingArea.selection.start, curWorkingArea.selection.end);
+	
+	      for (var _i2 = 0; _i2 < curWorkingArea.activeRange.length; _i2++) {
+	        for (var _j2 = 0; _j2 < curWorkingArea.activeRange[_i2].length; _j2++) {
+	          var _cell3 = curWorkingArea.activeRange[_i2][_j2];
+	          curSheet.data[_cell3.pos.row][_cell3.pos.col].selected = true;
+	        }
+	      }
 	      return newState;
 	
 	    case Action.RESIZE_COL:
 	
-	      for (var i = 0; i < curSheet.data.length; i++) {
-	        curSheet.data[i][action.colId].width = action.width;
+	      for (var _i3 = 0; _i3 < curSheet.data.length; _i3++) {
+	        curSheet.data[_i3][action.colId].width = action.width;
 	      }return newState;
 	
 	    case Action.RESIZE_ROW:
 	
-	      for (var _i = 0; _i < curSheet.data[0].length; _i++) {
-	        curSheet.data[action.rowId][_i].height = action.height;
+	      for (var _i4 = 0; _i4 < curSheet.data[0].length; _i4++) {
+	        curSheet.data[action.rowId][_i4].height = action.height;
 	      }return newState;
 	    default:
 	      return state;
@@ -24528,7 +24884,7 @@
 	exports.default = SheetReducer;
 
 /***/ },
-/* 229 */
+/* 232 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global, module) {/**
@@ -41600,7 +41956,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(200)(module)))
 
 /***/ },
-/* 230 */
+/* 233 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -41626,293 +41982,6 @@
 	thunk.withExtraArgument = createThunkMiddleware;
 	
 	exports['default'] = thunk;
-
-/***/ },
-/* 231 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _reactRedux = __webpack_require__(179);
-	
-	var _sheet_actions = __webpack_require__(211);
-	
-	var _cell_input = __webpack_require__(232);
-	
-	var _cell_input2 = _interopRequireDefault(_cell_input);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var mapStateToProps = function mapStateToProps(state) {
-	  var cell = state.doc.sheets[state.doc.activeSheet].workingArea.activeCell;
-	
-	  return {
-	    activeCell: cell,
-	    cell: state.doc.sheets[state.doc.activeSheet].data[cell.row][cell.col]
-	  };
-	};
-	
-	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-	  return {
-	    updateCell: function updateCell(cell) {
-	      return dispatch((0, _sheet_actions.updateCell)(cell));
-	    }
-	  };
-	};
-	
-	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_cell_input2.default);
-
-/***/ },
-/* 232 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	var _react = __webpack_require__(1);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var CellInput = function (_React$Component) {
-	  _inherits(CellInput, _React$Component);
-	
-	  function CellInput(props) {
-	    _classCallCheck(this, CellInput);
-	
-	    var _this = _possibleConstructorReturn(this, (CellInput.__proto__ || Object.getPrototypeOf(CellInput)).call(this, props));
-	
-	    _this.state = {
-	      content: props.cell.content
-	    };
-	
-	    _this.cellChanged = _this.cellChanged.bind(_this);
-	    return _this;
-	  }
-	
-	  _createClass(CellInput, [{
-	    key: "cellChanged",
-	    value: function cellChanged(e) {
-	      this.setState({ content: e.target.value });
-	      var _props = this.props,
-	          activeCell = _props.activeCell,
-	          updateCell = _props.updateCell;
-	
-	      var cell = {
-	        content: e.target.value,
-	        col: activeCell.col,
-	        row: activeCell.row
-	      };
-	
-	      updateCell(cell);
-	    }
-	  }, {
-	    key: "render",
-	    value: function render() {
-	
-	      return _react2.default.createElement("input", { type: "text", onChange: this.cellChanged, value: this.props.cell.content });
-	    }
-	  }]);
-	
-	  return CellInput;
-	}(_react2.default.Component);
-	
-	exports.default = CellInput;
-
-/***/ },
-/* 233 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _reactRedux = __webpack_require__(179);
-	
-	var _grid_header_cell = __webpack_require__(234);
-	
-	var _grid_header_cell2 = _interopRequireDefault(_grid_header_cell);
-	
-	var _sheet_actions = __webpack_require__(211);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var mapStateToProps = function mapStateToProps(state, ownProps) {
-	
-	  var curContent = ownProps.rowId === "" || ownProps.colId === "" ? ownProps.headerVal : state.doc.sheets[state.doc.activeSheet].data[ownProps.rowId][ownProps.colId];
-	  return {
-	    selection: state.doc.sheets[state.doc.activeSheet].workingArea.selection,
-	    activeCell: state.doc.sheets[state.doc.activeSheet].workingArea.activeCell,
-	    activeSheet: state.doc.activeSheet
-	  };
-	};
-	
-	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-	  return {
-	    resizeRow: function resizeRow(rowId, height) {
-	      return dispatch((0, _sheet_actions.resizeRow)(rowId, height));
-	    },
-	    resizeCol: function resizeCol(colId, width) {
-	      return dispatch((0, _sheet_actions.resizeCol)(colId, width));
-	    }
-	  };
-	};
-	
-	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_grid_header_cell2.default);
-
-/***/ },
-/* 234 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	var _react = __webpack_require__(1);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _grid_utils = __webpack_require__(215);
-	
-	var Util = _interopRequireWildcard(_grid_utils);
-	
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var GridHeaderCell = function (_React$Component) {
-	  _inherits(GridHeaderCell, _React$Component);
-	
-	  function GridHeaderCell(props) {
-	    _classCallCheck(this, GridHeaderCell);
-	
-	    var _this = _possibleConstructorReturn(this, (GridHeaderCell.__proto__ || Object.getPrototypeOf(GridHeaderCell)).call(this, props));
-	
-	    _this.state = {
-	      content: props.cell.content,
-	      size: props.cell.size
-	    };
-	
-	    _this.headerResize = _this.headerResize.bind(_this);
-	    _this.resizeEnd = _this.resizeEnd.bind(_this);
-	    return _this;
-	  }
-	
-	  _createClass(GridHeaderCell, [{
-	    key: 'headerResize',
-	    value: function headerResize(e) {
-	      var offset = $(e.target.parentElement).offset();
-	
-	      if (this.props.col) {
-	        var width = e.clientX - offset.left;
-	
-	        if (width > 0) {
-	          if (width < 25) width = 25;
-	
-	          this.setState({ size: width });
-	          e.target.parentElement.style.width = width;
-	        }
-	      } else {
-	        var height = e.clientY - offset.top;
-	
-	        if (height > 0) {
-	          if (height < 26) height = 26;
-	
-	          this.setState({ size: height });
-	          e.target.parentElement.style.height = height;
-	        }
-	      }
-	    }
-	  }, {
-	    key: 'resizeEnd',
-	    value: function resizeEnd() {
-	      var _props = this.props,
-	          rowId = _props.rowId,
-	          colId = _props.colId,
-	          resizeCol = _props.resizeCol,
-	          resizeRow = _props.resizeRow;
-	
-	      if (this.props.col) {
-	        resizeCol(colId, this.state.size);
-	      } else {
-	        resizeRow(rowId, this.state.size);
-	      }
-	    }
-	  }, {
-	    key: 'generateCellClass',
-	    value: function generateCellClass() {
-	      var className = "grid-cell";
-	
-	      var startVal = this.props.selection.start;
-	      var endVal = this.props.selection.end;
-	      var _props2 = this.props,
-	          rowId = _props2.rowId,
-	          colId = _props2.colId,
-	          activeCell = _props2.activeCell;
-	
-	
-	      if (activeCell.row === rowId || activeCell.col === colId || Util.between(rowId, startVal.row, endVal.row) || Util.between(colId, startVal.col, endVal.col)) {
-	        className += " active-cell";
-	      }
-	
-	      return className;
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	
-	      var style = {};
-	
-	      if (this.props.col) {
-	        style.width = this.props.cell.size;
-	      } else {
-	        style.height = this.props.cell.size;
-	      }
-	
-	      return _react2.default.createElement(
-	        'span',
-	        {
-	          className: this.generateCellClass(),
-	          style: style
-	        },
-	        this.state.content,
-	        _react2.default.createElement('span', { draggable: 'true', onDrag: this.headerResize, onDragEnd: this.resizeEnd, className: 'resizer' })
-	      );
-	    }
-	  }]);
-	
-	  return GridHeaderCell;
-	}(_react2.default.Component);
-	
-	exports.default = GridHeaderCell;
 
 /***/ }
 /******/ ]);
