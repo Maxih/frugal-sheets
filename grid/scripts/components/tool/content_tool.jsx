@@ -1,26 +1,13 @@
 import React from 'react';
+import CellInputContainer from '../tool/cell_input_container';
 
 export default class ContentTool extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      content: ""
+      content: props.content
     }
-
-    this.contentChanged = this.contentChanged.bind(this);
-  }
-
-  contentChanged(e) {
-    this.setState({content: e.target.value});
-    const {activeCell, updateCell} = this.props;
-    const cell = {
-      content: this.state.content,
-      col: activeCell.col,
-      row: activeCell.row
-    }
-
-    updateCell(cell);
   }
 
   render() {
@@ -28,11 +15,9 @@ export default class ContentTool extends React.Component {
       <section className="formula-bar">
         <span className="formula-logo">fx</span>
         <span className="formula">
-          <input type="text" value={this.state.content} onChange={this.contentChanged}/>
+          <CellInputContainer content={this.state.content} />
         </span>
       </section>
     );
   }
 }
-
-<div id="t-formula-bar-label"><div class="docs-icon goog-inline-block"><div class="docs-icon-img-container docs-icon-img docs-icon-insert-formula"></div></div></div>

@@ -4,6 +4,7 @@ import Grid from './grid';
 
 const mapStateToProps = (state) => {
   return {
+    grid: state.doc.sheets[state.doc.activeSheet].data
   };
 };
 

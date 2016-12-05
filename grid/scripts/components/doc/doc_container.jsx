@@ -1,6 +1,5 @@
 import { connect } from 'react-redux';
-import { receiveStartCoord, receiveEndCoord, tempEndCoord } from '../../actions/working_area_actions';
-import { updateCell } from '../../actions/sheet_actions';
+import { receiveStartCoord, receiveEndCoord, tempEndCoord, updateCell } from '../../actions/sheet_actions';
 import Doc from './doc';
 
 const mapStateToProps = (state) => {

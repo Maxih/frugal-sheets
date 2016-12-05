@@ -11,14 +11,7 @@ export default class Doc extends React.Component {
   }
 
   render() {
-    const sheets = Object.keys(this.props.sheets).map((sheet) => {
-      if(sheet === this.props.activeSheet) {
-        return (
-          <GridContainer key={sheet} sheet={this.props.sheets[this.props.activeSheet]} />
-        )
-      }
-      return;
-    });
+
     return (
 
       <section className="doc-wrapper">
@@ -26,7 +19,7 @@ export default class Doc extends React.Component {
           <DocEditorContainer />
         </section>
         <section className="doc">
-          {sheets}
+          <GridContainer />
         </section>
         <section className="sheet-nav">
           <SheetNavContainer />

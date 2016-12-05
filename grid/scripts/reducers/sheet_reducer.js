@@ -2,24 +2,35 @@ import * as Action from '../actions/sheet_actions.js';
 import {blankSheet} from '../utils/grid_utils';
 import {merge} from 'lodash';
 
-
+const workingAreaDefaults = {
+  activeCell: { row: 0, col: 0, content: ""},
+  selecting: false,
+  selection: {
+    start: {},
+    end: {},
+  }
+};
 
 const defaults = {
   activeSheet: "Sheet1",
   sheets: {
-    Sheet1: blankSheet()
+    Sheet1: {
+      workingArea: workingAreaDefaults,
+      data: blankSheet()
+    }
   }
 };
 
 function SheetReducer(state = defaults, action) {
   const newState = merge({}, state);
+  const curSheet = newState.sheets[newState.activeSheet];
+  const curWorkingArea = curSheet.workingArea;
+
   switch(action.type) {
     case Action.UPDATE_CELL:
       const cell = action.cell;
-      const sheet = newState.sheets[newState.activeSheet];
-
-      sheet[cell.row][cell.col] = cell.content;
-
+      curSheet.data[cell.row][cell.col] = cell.content;
+      curWorkingArea.activeCell.content = cell.content;
       return newState;
 
     case Action.CHANGE_ACTIVE_SHEET:
@@ -27,10 +38,32 @@ function SheetReducer(state = defaults, action) {
       return newState;
 
     case Action.ADD_SHEET:
-      newState.sheets[action.name] = blankSheet();
+      newState.sheets[action.name] = {data: blankSheet(), workingArea: workingAreaDefaults};
       newState.activeSheet = action.name;
-      
       return newState;
+
+    case Action.RECEIVE_START_COORD:
+      curWorkingArea.activeCell.col = action.start.col;
+      curWorkingArea.activeCell.row = action.start.row;
+      curWorkingArea.selection.start = action.start;
+      curWorkingArea.selection.end = {};
+      curWorkingArea.selecting = action.selecting;
+      curWorkingArea.activeCell.content = action.content;
+      return newState;
+
+    case Action.RECEIVE_END_COORD:
+      curWorkingArea.selection.end = action.end;
+      curWorkingArea.selecting = action.selecting;
+
+      if(curWorkingArea.selection.end.row === curWorkingArea.selection.start.row && curWorkingArea.selection.end.col === curWorkingArea.selection.start.col)
+        curWorkingArea.selection = {start: {}, end: {}};
+
+      return newState;
+
+    case Action.SELECTING_TEMP_COORD:
+      curWorkingArea.selection.end = action.end;
+      return newState;
+
     default:
       return state;
   }

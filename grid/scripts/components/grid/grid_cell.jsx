@@ -1,5 +1,7 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import * as Util from '../../utils/grid_utils';
+
 
 export default class GridCell extends React.Component {
   constructor(props) {
@@ -14,23 +16,25 @@ export default class GridCell extends React.Component {
     this.cellChanged = this.cellChanged.bind(this);
   }
 
+  componentDidUpdate() {
+    if(this.refs.cellTextArea) {
+      ReactDOM.findDOMNode(this.refs.cellTextArea).focus();
+    }
+  }
+
   mouseAction(e) {
     const {rowId, colId} = this.props;
     const {receiveStartCoord, receiveEndCoord} = this.props;
 
-    if(rowId === "" || colId === "")
-      return;
-
     if(e.type === "mouseup") {
       receiveEndCoord({row:rowId, col:colId})
     } else {
-      receiveStartCoord({row:rowId, col:colId})
+      receiveStartCoord({coord: {row:rowId, col:colId}, content:this.state.content})
     }
   }
+
   mouseOver() {
     const {rowId, colId, tempEndCoord} = this.props;
-    if(rowId === "" || colId === "")
-      return;
 
     if(this.props.selecting) {
 
@@ -43,12 +47,16 @@ export default class GridCell extends React.Component {
     this.setState({content: e.target.value});
     const {rowId, colId, updateCell} = this.props;
     const cell = {
-      content: this.state.content,
+      content: e.target.value,
       col: colId,
       row: rowId
     }
 
+
     updateCell(cell);
+
+
+
   }
 
   generateCellClass() {
@@ -62,14 +70,6 @@ export default class GridCell extends React.Component {
       if(Util.cellInSelection(rowId, colId, startVal, endVal))
         className += " active-cell";
 
-    if(this.props.header &&
-      ((activeCell.row === rowId || activeCell.col === colId) ||
-      (Util.between(rowId, startVal.row, endVal.row) || Util.between(colId, startVal.col, endVal.col))
-    )){
-      className += " active-cell";
-    }
-
-
     if(this.isSelectedCell())
       className += " selected-cell";
 
@@ -82,12 +82,11 @@ export default class GridCell extends React.Component {
   }
 
   render() {
-
-    let content = this.state.content;
+    let content = this.props.content;
 
     if(this.isSelectedCell()) {
       content = (
-        <textarea onChange={this.cellChanged} value={this.state.content} />
+        <textarea ref="cellTextArea" onChange={this.cellChanged} value={content} />
       );
     }
 

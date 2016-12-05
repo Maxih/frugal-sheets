@@ -1,13 +1,14 @@
 import { connect } from 'react-redux';
-import { receiveStartCoord, receiveEndCoord, tempEndCoord } from '../../actions/working_area_actions';
-import { updateCell } from '../../actions/sheet_actions';
+import { receiveStartCoord, receiveEndCoord, tempEndCoord, updateCell } from '../../actions/sheet_actions';
 import GridCell from './grid_cell';
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
+
   return {
-    selecting: state.workingArea.selecting,
-    selection: state.workingArea.selection,
-    activeCell: state.workingArea.activeCell
+    selecting: state.doc.sheets[state.doc.activeSheet].workingArea.selecting,
+    selection: state.doc.sheets[state.doc.activeSheet].workingArea.selection,
+    activeCell: state.doc.sheets[state.doc.activeSheet].workingArea.activeCell,
+    content: state.doc.sheets[state.doc.activeSheet].data[ownProps.rowId][ownProps.colId]
   };
 };
 

@@ -52,6 +52,8 @@ body {
 
 .grid-row-labels .grid-cell,
 .grid-column-labels .grid-cell {
+  position: relative;
+  overflow: visible;
   background: #f3f3f3;
   font-family: Arial;
   text-align: center;
@@ -104,10 +106,48 @@ body {
 
 .selected-cell {
   border: 2px solid #4285f4;
+  box-shadow: 0px 0px 10px #666;
+  z-index: 10;
 }
 
 .grid-cell textarea {
   border: none;
   display: block;
   outline: none;
+}
+
+.grid-cell p {
+  padding: 0;
+  margin: 0;
+}
+.grid-row-labels .resizer {
+  height: 6px;
+  width: 50px;
+  bottom: -3px;
+  left: 0;
+}
+.grid-row-labels .resizer:hover {
+  cursor: ns-resize;
+}
+
+.grid-column-labels .resizer {
+  width: 6px;
+  height: 26px;
+  right: -3px;
+  top: 0px;
+}
+
+.grid-column-labels .resizer:hover {
+  cursor: ew-resize;
+}
+
+.resizer {
+  background: transparent;
+  display: block;
+  position: absolute;
+  z-index: 5;
+}
+
+.resizer:hover {
+  background: #4285f4;
 }

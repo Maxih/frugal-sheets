@@ -9,7 +9,7 @@ export default class Grid extends React.Component {
     super(props);
 
     this.state = {
-      grid: props.sheet
+      grid: props.grid
     }
   }
 
