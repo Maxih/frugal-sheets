@@ -1,20 +1,24 @@
 import { connect } from 'react-redux';
 import GridHeaderCell from './grid_header_cell';
-import {resizeRow, resizeCol} from '../../actions/sheet_actions';
+import {resizeRow, resizeCol, selectRow, selectCol} from '../../actions/sheet_actions';
+import {isHeaderActive, headerSize} from '../../reducers/selectors';
 
 const mapStateToProps = (state, ownProps) => {
 
-  const curContent = (ownProps.rowId === "" || ownProps.colId === "") ? ownProps.headerVal : state.doc.sheets[state.doc.activeSheet].data[ownProps.rowId][ownProps.colId]
+
+
   return {
-    selection: state.doc.sheets[state.doc.activeSheet].workingArea.selection,
-    activeCell: state.doc.sheets[state.doc.activeSheet].workingArea.activeCell,
+    size: headerSize(state.doc.sheets[state.doc.activeSheet].data, ownProps),
     activeSheet: state.doc.activeSheet,
+    active: isHeaderActive(state.doc.sheets[state.doc.activeSheet].workingArea.activeRange, ownProps)
   };
 };
 
 const mapDispatchToProps = dispatch => ({
   resizeRow: (rowId, height) => dispatch(resizeRow(rowId, height)),
-  resizeCol: (colId, width) => dispatch(resizeCol(colId, width))
+  resizeCol: (colId, width) => dispatch(resizeCol(colId, width)),
+  selectRow: (rowId) => dispatch(selectRow(rowId)),
+  selectCol: (colId) => dispatch(selectCol(colId)),
 });
 
 export default connect(

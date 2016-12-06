@@ -6,10 +6,6 @@ const workingAreaDefaults = {
   activeCell: { pos: {row: 0, col: 0}, content: ""},
   activeRange: [],
   selecting: false,
-  selection: {
-    start: {},
-    end: {},
-  }
 };
 
 const defaults = {
@@ -30,7 +26,7 @@ function SheetReducer(state = defaults, action) {
   switch(action.type) {
     case Action.UPDATE_CELL:
       const cell = action.cell;
-      curSheet.data[cell.row][cell.col].content = cell.content;
+      curSheet.data[cell.pos.row][cell.pos.col].content = cell.content;
       curWorkingArea.activeCell.content = cell.content;
       return newState;
 
@@ -44,60 +40,18 @@ function SheetReducer(state = defaults, action) {
       return newState;
 
     case Action.RECEIVE_START_CELL:
-
-      // Reset previously selected items to unselected
-      for(let i = 0; i < curWorkingArea.activeRange.length; i++)
-      {
-        for(let j = 0; j < curWorkingArea.activeRange[i].length; j++) {
-          const cell = curWorkingArea.activeRange[i][j];
-          curSheet.data[cell.pos.row][cell.pos.col].selected = false;
-        }
-      }
-
       curWorkingArea.selecting = action.selecting;
-
-      curSheet.data[curWorkingArea.activeCell.pos.row][curWorkingArea.activeCell.pos.col].active = false;
-
       curWorkingArea.activeCell = action.cell;
-      curWorkingArea.activeCell.active = true;
-
-      curSheet.data[action.cell.pos.row][action.cell.pos.col].active = true;
-
-      curWorkingArea.selection.start = action.cell.pos;
-      curWorkingArea.selection.end = {};
-
       return newState;
-
 
     case Action.RECEIVE_END_CELL:
       curWorkingArea.selecting = action.selecting;
-      curWorkingArea.selection.end = action.cell.pos;
 
     case Action.SELECTING_TEMP_CELL:
-      curWorkingArea.selection.end = action.cell.pos;
-
-      // Reset previously selected items to unselected
-      for(let i = 0; i < curWorkingArea.activeRange.length; i++)
-      {
-        for(let j = 0; j < curWorkingArea.activeRange[i].length; j++) {
-          const cell = curWorkingArea.activeRange[i][j];
-          curSheet.data[cell.pos.row][cell.pos.col].selected = false;
-        }
-      }
-
-      curWorkingArea.activeRange = getCellsBetween(curSheet.data, curWorkingArea.selection.start, curWorkingArea.selection.end)
-
-      for(let i = 0; i < curWorkingArea.activeRange.length; i++)
-      {
-        for(let j = 0; j < curWorkingArea.activeRange[i].length; j++) {
-          const cell = curWorkingArea.activeRange[i][j];
-          curSheet.data[cell.pos.row][cell.pos.col].selected = true;
-        }
-      }
+      curWorkingArea.activeRange = getCellsBetween(curSheet.data, curWorkingArea.activeCell.pos, action.cell.pos)
       return newState;
 
     case Action.RESIZE_COL:
-
       for(let i = 0; i < curSheet.data.length; i++)
         curSheet.data[i][action.colId].width = action.width;
 
@@ -109,6 +63,17 @@ function SheetReducer(state = defaults, action) {
         curSheet.data[action.rowId][i].height = action.height;
 
       return newState;
+
+    case Action.SELECT_COL:
+      curWorkingArea.activeRange = getColFromId(curSheet.data, action.colId);
+      curWorkingArea.activeCell = curSheet.data[0][action.colId];
+      return newState;
+
+    case Action.SELECT_ROW:
+      curWorkingArea.activeRange = getRowFromId(curSheet.data, action.rowId);
+      curWorkingArea.activeCell = curSheet.data[action.rowId][0];
+      return newState;
+
     default:
       return state;
   }

@@ -1,16 +1,9 @@
 export function getRowFromId(gridState, id) {
-
-  return gridState[id];
+  return getCellsBetween(gridState, {col: 0, row: id}, {col: gridState[0].length-1, row:id})
 }
 
 export function getColFromId(gridState, id) {
-  const col = [];
-
-  for(let i = 0; i < gridState.length; i++) {
-    col.push(gridState[i][id]);
-  }
-
-  return col;
+  return getCellsBetween(gridState, {col: id, row: 0}, {col: id, row: gridState.length-1})
 }
 
 export function getCellsBetween(gridState, start, end) {
@@ -72,8 +65,6 @@ export function blankSheet() {
           content: "",
           width: 100,
           height: 26,
-          selected: false,
-          active: false,
           pos: {
             row: i,
             col: j

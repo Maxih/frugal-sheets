@@ -82,10 +82,10 @@ export default class Grid extends React.Component {
       <section className="grid-wrapper">
         <span className="grid-blank-label"></span>
         <span className="grid-column-labels">
-          <GridHeader curId="" row={this.colHeads()}/>
+          <GridHeader row={this.colHeads()}/>
         </span>
         <span className="grid-row-labels">
-          <GridHeader curId="" row={this.rowHeads()} col={true} />
+          <GridHeader row={this.rowHeads()} col={true} />
         </span>
         <section className="grid">
           {rows}

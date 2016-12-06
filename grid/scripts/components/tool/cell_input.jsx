@@ -1,4 +1,7 @@
 import React from 'react';
+import {merge} from 'lodash';
+import ReactDOM from 'react-dom';
+
 
 export default class CellInput extends React.Component {
   constructor(props) {
@@ -11,21 +14,23 @@ export default class CellInput extends React.Component {
     this.cellChanged = this.cellChanged.bind(this);
   }
 
-  cellChanged(e) {
-    this.setState({content: e.target.value});
-    const {activeCell, updateCell} = this.props;
-    const cell = {
-      content: e.target.value,
-      col: activeCell.col,
-      row: activeCell.row
+  componentDidMount() {
+    if(this.refs[this.props.refName]) {
+      ReactDOM.findDOMNode(this.refs[this.props.refName]).focus();
     }
+  }
 
-    updateCell(cell);
+  cellChanged(e) {
+    const newCell = merge({}, this.props.cell, {content: e.target.value});
+
+    this.setState({content: newCell.content});
+
+    this.props.updateCell(newCell);
   }
 
   render() {
     return (
-      <input type="text" onChange={this.cellChanged} value={this.props.cell.content} />
+      <textarea className="cell-val-textarea" ref={this.props.refName} onChange={this.cellChanged} value={this.props.cell.content} />
     );
   }
 }

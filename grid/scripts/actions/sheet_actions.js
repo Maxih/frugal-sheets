@@ -6,6 +6,8 @@ export const RECEIVE_END_CELL = "RECEIVE_END_CELL";
 export const SELECTING_TEMP_CELL = "SELECTING_TEMP_CELL";
 export const RESIZE_ROW = "RESIZE_ROW";
 export const RESIZE_COL = "RESIZE_COL";
+export const SELECT_ROW = "SELECT_ROW";
+export const SELECT_COL = "SELECT_COL";
 
 export const updateCell = (cell) => ({
   type: UPDATE_CELL,
@@ -49,4 +51,14 @@ export const resizeCol = (colId, width) => ({
   type: RESIZE_COL,
   colId,
   width
+});
+
+export const selectRow = (rowId) => ({
+  type: SELECT_ROW,
+  rowId
+});
+
+export const selectCol = (colId) => ({
+  type: SELECT_COL,
+  colId
 });

@@ -23308,6 +23308,8 @@
 	var SELECTING_TEMP_CELL = exports.SELECTING_TEMP_CELL = "SELECTING_TEMP_CELL";
 	var RESIZE_ROW = exports.RESIZE_ROW = "RESIZE_ROW";
 	var RESIZE_COL = exports.RESIZE_COL = "RESIZE_COL";
+	var SELECT_ROW = exports.SELECT_ROW = "SELECT_ROW";
+	var SELECT_COL = exports.SELECT_COL = "SELECT_COL";
 	
 	var updateCell = exports.updateCell = function updateCell(cell) {
 	  return {
@@ -23366,6 +23368,20 @@
 	    type: RESIZE_COL,
 	    colId: colId,
 	    width: width
+	  };
+	};
+	
+	var selectRow = exports.selectRow = function selectRow(rowId) {
+	  return {
+	    type: SELECT_ROW,
+	    rowId: rowId
+	  };
+	};
+	
+	var selectCol = exports.selectCol = function selectCol(colId) {
+	  return {
+	    type: SELECT_COL,
+	    colId: colId
 	  };
 	};
 
@@ -23598,12 +23614,12 @@
 	        _react2.default.createElement(
 	          'span',
 	          { className: 'grid-column-labels' },
-	          _react2.default.createElement(_grid_header2.default, { curId: '', row: this.colHeads() })
+	          _react2.default.createElement(_grid_header2.default, { row: this.colHeads() })
 	        ),
 	        _react2.default.createElement(
 	          'span',
 	          { className: 'grid-row-labels' },
-	          _react2.default.createElement(_grid_header2.default, { curId: '', row: this.rowHeads(), col: true })
+	          _react2.default.createElement(_grid_header2.default, { row: this.rowHeads(), col: true })
 	        ),
 	        _react2.default.createElement(
 	          'section',
@@ -23636,18 +23652,11 @@
 	exports.newSheetName = newSheetName;
 	exports.blankSheet = blankSheet;
 	function getRowFromId(gridState, id) {
-	
-	  return gridState[id];
+	  return getCellsBetween(gridState, { col: 0, row: id }, { col: gridState[0].length - 1, row: id });
 	}
 	
 	function getColFromId(gridState, id) {
-	  var col = [];
-	
-	  for (var i = 0; i < gridState.length; i++) {
-	    col.push(gridState[i][id]);
-	  }
-	
-	  return col;
+	  return getCellsBetween(gridState, { col: id, row: 0 }, { col: id, row: gridState.length - 1 });
 	}
 	
 	function getCellsBetween(gridState, start, end) {
@@ -23707,8 +23716,6 @@
 	        content: "",
 	        width: 100,
 	        height: 26,
-	        selected: false,
-	        active: false,
 	        pos: {
 	          row: i,
 	          col: j
@@ -23828,11 +23835,15 @@
 	
 	var _grid_cell2 = _interopRequireDefault(_grid_cell);
 	
+	var _selectors = __webpack_require__(234);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var mapStateToProps = function mapStateToProps(state, ownProps) {
 	
 	  return {
+	    selected: (0, _selectors.isCellSelected)(state.doc.sheets[state.doc.activeSheet].workingArea.activeRange, state.doc.sheets[state.doc.activeSheet].data[ownProps.rowId][ownProps.colId]),
+	    active: (0, _selectors.isCellActive)(state.doc.sheets[state.doc.activeSheet].workingArea.activeRange, state.doc.sheets[state.doc.activeSheet].data[ownProps.rowId][ownProps.colId]),
 	    selecting: state.doc.sheets[state.doc.activeSheet].workingArea.selecting,
 	    cell: state.doc.sheets[state.doc.activeSheet].data[ownProps.rowId][ownProps.colId]
 	  };
@@ -23873,13 +23884,15 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactDom = __webpack_require__(32);
-	
-	var _reactDom2 = _interopRequireDefault(_reactDom);
-	
 	var _grid_utils = __webpack_require__(214);
 	
 	var Util = _interopRequireWildcard(_grid_utils);
+	
+	var _lodash = __webpack_require__(232);
+	
+	var _cell_input_container = __webpack_require__(227);
+	
+	var _cell_input_container2 = _interopRequireDefault(_cell_input_container);
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
@@ -23910,16 +23923,9 @@
 	  }
 	
 	  _createClass(GridCell, [{
-	    key: 'componentDidUpdate',
-	    value: function componentDidUpdate() {
-	      if (this.refs.cellTextArea) {
-	        _reactDom2.default.findDOMNode(this.refs.cellTextArea).focus();
-	      }
-	    }
-	  }, {
 	    key: 'shouldComponentUpdate',
 	    value: function shouldComponentUpdate(nextProps) {
-	      if (this.props.cell.content !== nextProps.cell.content || this.props.cell.width !== nextProps.cell.width || this.props.cell.height !== nextProps.cell.height || this.props.cell.selected !== nextProps.cell.selected || this.props.cell.active !== nextProps.cell.active) return true;
+	      if (this.props.cell.content !== nextProps.cell.content || this.props.cell.width !== nextProps.cell.width || this.props.cell.height !== nextProps.cell.height || this.props.selected !== nextProps.selected || this.props.active !== nextProps.active) return true;
 	
 	      return false;
 	    }
@@ -23976,15 +23982,11 @@
 	    value: function generateCellClass() {
 	      var className = "grid-cell";
 	
-	      // if(!(startVal.row === endVal.row && startVal.col === endVal.col))
-	      //   if(Util.cellInSelection(rowId, colId, startVal, endVal))
-	      //     className += " active-cell";
-	
-	      if (this.props.cell.selected) {
-	        className += " active-cell";
+	      if (this.props.selected) {
+	        className += " selected-cell";
 	      }
 	
-	      if (this.props.cell.active) className += " selected-cell";
+	      if (this.props.active) className += " active-cell";
 	
 	      return className;
 	    }
@@ -23993,8 +23995,8 @@
 	    value: function render() {
 	      var content = this.props.cell.content;
 	
-	      if (this.props.cell.active) {
-	        content = _react2.default.createElement('textarea', { ref: 'cellTextArea', onChange: this.cellChanged, value: content });
+	      if (this.props.active) {
+	        content = _react2.default.createElement(_cell_input_container2.default, { refName: 'cellRef', cell: this.props.cell, updateCell: this.props.updateCell });
 	      }
 	
 	      var style = {
@@ -24069,14 +24071,14 @@
 	            key: idx,
 	            col: true,
 	            colId: idx,
-	            rowId: _this2.props.curId,
+	            rowId: '',
 	            cell: cell
 	          });
 	        } else {
 	          return _react2.default.createElement(_grid_header_cell_container2.default, {
 	            key: idx,
 	            col: false,
-	            colId: _this2.props.curId,
+	            colId: '',
 	            rowId: idx,
 	            cell: cell
 	          });
@@ -24114,15 +24116,16 @@
 	
 	var _sheet_actions = __webpack_require__(210);
 	
+	var _selectors = __webpack_require__(234);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var mapStateToProps = function mapStateToProps(state, ownProps) {
 	
-	  var curContent = ownProps.rowId === "" || ownProps.colId === "" ? ownProps.headerVal : state.doc.sheets[state.doc.activeSheet].data[ownProps.rowId][ownProps.colId];
 	  return {
-	    selection: state.doc.sheets[state.doc.activeSheet].workingArea.selection,
-	    activeCell: state.doc.sheets[state.doc.activeSheet].workingArea.activeCell,
-	    activeSheet: state.doc.activeSheet
+	    size: (0, _selectors.headerSize)(state.doc.sheets[state.doc.activeSheet].data, ownProps),
+	    activeSheet: state.doc.activeSheet,
+	    active: (0, _selectors.isHeaderActive)(state.doc.sheets[state.doc.activeSheet].workingArea.activeRange, ownProps)
 	  };
 	};
 	
@@ -24133,6 +24136,12 @@
 	    },
 	    resizeCol: function resizeCol(colId, width) {
 	      return dispatch((0, _sheet_actions.resizeCol)(colId, width));
+	    },
+	    selectRow: function selectRow(rowId) {
+	      return dispatch((0, _sheet_actions.selectRow)(rowId));
+	    },
+	    selectCol: function selectCol(colId) {
+	      return dispatch((0, _sheet_actions.selectCol)(colId));
 	    }
 	  };
 	};
@@ -24178,12 +24187,12 @@
 	    var _this = _possibleConstructorReturn(this, (GridHeaderCell.__proto__ || Object.getPrototypeOf(GridHeaderCell)).call(this, props));
 	
 	    _this.state = {
-	      content: props.cell.content,
-	      size: props.cell.size
+	      size: props.size
 	    };
 	
 	    _this.headerResize = _this.headerResize.bind(_this);
 	    _this.resizeEnd = _this.resizeEnd.bind(_this);
+	    _this.selectCells = _this.selectCells.bind(_this);
 	    return _this;
 	  }
 	
@@ -24232,39 +24241,48 @@
 	    value: function generateCellClass() {
 	      var className = "grid-cell";
 	
-	      var startVal = this.props.selection.start;
-	      var endVal = this.props.selection.end;
-	      var _props2 = this.props,
-	          rowId = _props2.rowId,
-	          colId = _props2.colId,
-	          activeCell = _props2.activeCell;
-	
-	
-	      if (activeCell.row === rowId || activeCell.col === colId || Util.between(rowId, startVal.row, endVal.row) || Util.between(colId, startVal.col, endVal.col)) {
-	        className += " active-cell";
-	      }
+	      if (this.props.active) className += " selected-cell";
 	
 	      return className;
 	    }
 	  }, {
-	    key: 'render',
-	    value: function render() {
-	
-	      var style = {};
+	    key: 'selectCells',
+	    value: function selectCells() {
+	      var _props2 = this.props,
+	          rowId = _props2.rowId,
+	          colId = _props2.colId,
+	          selectCol = _props2.selectCol,
+	          selectRow = _props2.selectRow;
 	
 	      if (this.props.col) {
-	        style.width = this.props.cell.size;
+	        selectCol(colId);
 	      } else {
-	        style.height = this.props.cell.size;
+	        selectRow(rowId);
+	      }
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var style = {};
+	      var _props3 = this.props,
+	          rowId = _props3.rowId,
+	          colId = _props3.colId;
+	
+	
+	      if (this.props.col) {
+	        style.width = this.props.size;
+	      } else {
+	        style.height = this.props.size;
 	      }
 	
 	      return _react2.default.createElement(
 	        'span',
 	        {
 	          className: this.generateCellClass(),
-	          style: style
+	          style: style,
+	          onClick: this.selectCells
 	        },
-	        this.state.content,
+	        this.props.cell.content,
 	        _react2.default.createElement('span', { draggable: 'true', onDrag: this.headerResize, onDragEnd: this.resizeEnd, className: 'resizer' })
 	      );
 	    }
@@ -24511,7 +24529,12 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var mapStateToProps = function mapStateToProps(state) {
-	  return {};
+	  var cell = state.doc.sheets[state.doc.activeSheet].workingArea.activeCell;
+	
+	  return {
+	    activeCell: cell,
+	    cell: state.doc.sheets[state.doc.activeSheet].data[cell.pos.row][cell.pos.col]
+	  };
 	};
 	
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
@@ -24558,12 +24581,7 @@
 	  function ContentTool(props) {
 	    _classCallCheck(this, ContentTool);
 	
-	    var _this = _possibleConstructorReturn(this, (ContentTool.__proto__ || Object.getPrototypeOf(ContentTool)).call(this, props));
-	
-	    _this.state = {
-	      content: props.content
-	    };
-	    return _this;
+	    return _possibleConstructorReturn(this, (ContentTool.__proto__ || Object.getPrototypeOf(ContentTool)).call(this, props));
 	  }
 	
 	  _createClass(ContentTool, [{
@@ -24580,7 +24598,7 @@
 	        _react2.default.createElement(
 	          'span',
 	          { className: 'formula' },
-	          _react2.default.createElement(_cell_input_container2.default, { content: this.state.content })
+	          _react2.default.createElement(_cell_input_container2.default, { refName: 'formulaRef', updateCell: this.props.updateCell, cell: this.props.cell })
 	        )
 	      );
 	    }
@@ -24612,20 +24630,11 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var mapStateToProps = function mapStateToProps(state) {
-	  var cell = state.doc.sheets[state.doc.activeSheet].workingArea.activeCell;
-	
-	  return {
-	    activeCell: cell,
-	    cell: state.doc.sheets[state.doc.activeSheet].data[cell.pos.row][cell.pos.col]
-	  };
+	  return {};
 	};
 	
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-	  return {
-	    updateCell: function updateCell(cell) {
-	      return dispatch((0, _sheet_actions.updateCell)(cell));
-	    }
-	  };
+	  return {};
 	};
 	
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_cell_input2.default);
@@ -24634,7 +24643,7 @@
 /* 228 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -24645,6 +24654,12 @@
 	var _react = __webpack_require__(1);
 	
 	var _react2 = _interopRequireDefault(_react);
+	
+	var _lodash = __webpack_require__(232);
+	
+	var _reactDom = __webpack_require__(32);
+	
+	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -24671,25 +24686,25 @@
 	  }
 	
 	  _createClass(CellInput, [{
-	    key: "cellChanged",
-	    value: function cellChanged(e) {
-	      this.setState({ content: e.target.value });
-	      var _props = this.props,
-	          activeCell = _props.activeCell,
-	          updateCell = _props.updateCell;
-	
-	      var cell = {
-	        content: e.target.value,
-	        col: activeCell.col,
-	        row: activeCell.row
-	      };
-	
-	      updateCell(cell);
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      if (this.refs[this.props.refName]) {
+	        _reactDom2.default.findDOMNode(this.refs[this.props.refName]).focus();
+	      }
 	    }
 	  }, {
-	    key: "render",
+	    key: 'cellChanged',
+	    value: function cellChanged(e) {
+	      var newCell = (0, _lodash.merge)({}, this.props.cell, { content: e.target.value });
+	
+	      this.setState({ content: newCell.content });
+	
+	      this.props.updateCell(newCell);
+	    }
+	  }, {
+	    key: 'render',
 	    value: function render() {
-	      return _react2.default.createElement("input", { type: "text", onChange: this.cellChanged, value: this.props.cell.content });
+	      return _react2.default.createElement('textarea', { className: 'cell-val-textarea', ref: this.props.refName, onChange: this.cellChanged, value: this.props.cell.content });
 	    }
 	  }]);
 	
@@ -24775,11 +24790,7 @@
 	var workingAreaDefaults = {
 	  activeCell: { pos: { row: 0, col: 0 }, content: "" },
 	  activeRange: [],
-	  selecting: false,
-	  selection: {
-	    start: {},
-	    end: {}
-	  }
+	  selecting: false
 	};
 	
 	var defaults = {
@@ -24803,7 +24814,7 @@
 	  switch (action.type) {
 	    case Action.UPDATE_CELL:
 	      var cell = action.cell;
-	      curSheet.data[cell.row][cell.col].content = cell.content;
+	      curSheet.data[cell.pos.row][cell.pos.col].content = cell.content;
 	      curWorkingArea.activeCell.content = cell.content;
 	      return newState;
 	
@@ -24817,65 +24828,38 @@
 	      return newState;
 	
 	    case Action.RECEIVE_START_CELL:
-	
-	      // Reset previously selected items to unselected
-	      for (var i = 0; i < curWorkingArea.activeRange.length; i++) {
-	        for (var j = 0; j < curWorkingArea.activeRange[i].length; j++) {
-	          var _cell = curWorkingArea.activeRange[i][j];
-	          curSheet.data[_cell.pos.row][_cell.pos.col].selected = false;
-	        }
-	      }
-	
 	      curWorkingArea.selecting = action.selecting;
-	
-	      curSheet.data[curWorkingArea.activeCell.pos.row][curWorkingArea.activeCell.pos.col].active = false;
-	
 	      curWorkingArea.activeCell = action.cell;
-	      curWorkingArea.activeCell.active = true;
-	
-	      curSheet.data[action.cell.pos.row][action.cell.pos.col].active = true;
-	
-	      curWorkingArea.selection.start = action.cell.pos;
-	      curWorkingArea.selection.end = {};
-	
 	      return newState;
 	
 	    case Action.RECEIVE_END_CELL:
 	      curWorkingArea.selecting = action.selecting;
-	      curWorkingArea.selection.end = action.cell.pos;
 	
 	    case Action.SELECTING_TEMP_CELL:
-	      curWorkingArea.selection.end = action.cell.pos;
-	
-	      // Reset previously selected items to unselected
-	      for (var _i = 0; _i < curWorkingArea.activeRange.length; _i++) {
-	        for (var _j = 0; _j < curWorkingArea.activeRange[_i].length; _j++) {
-	          var _cell2 = curWorkingArea.activeRange[_i][_j];
-	          curSheet.data[_cell2.pos.row][_cell2.pos.col].selected = false;
-	        }
-	      }
-	
-	      curWorkingArea.activeRange = (0, _grid_utils.getCellsBetween)(curSheet.data, curWorkingArea.selection.start, curWorkingArea.selection.end);
-	
-	      for (var _i2 = 0; _i2 < curWorkingArea.activeRange.length; _i2++) {
-	        for (var _j2 = 0; _j2 < curWorkingArea.activeRange[_i2].length; _j2++) {
-	          var _cell3 = curWorkingArea.activeRange[_i2][_j2];
-	          curSheet.data[_cell3.pos.row][_cell3.pos.col].selected = true;
-	        }
-	      }
+	      curWorkingArea.activeRange = (0, _grid_utils.getCellsBetween)(curSheet.data, curWorkingArea.activeCell.pos, action.cell.pos);
 	      return newState;
 	
 	    case Action.RESIZE_COL:
-	
-	      for (var _i3 = 0; _i3 < curSheet.data.length; _i3++) {
-	        curSheet.data[_i3][action.colId].width = action.width;
+	      for (var i = 0; i < curSheet.data.length; i++) {
+	        curSheet.data[i][action.colId].width = action.width;
 	      }return newState;
 	
 	    case Action.RESIZE_ROW:
 	
-	      for (var _i4 = 0; _i4 < curSheet.data[0].length; _i4++) {
-	        curSheet.data[action.rowId][_i4].height = action.height;
+	      for (var _i = 0; _i < curSheet.data[0].length; _i++) {
+	        curSheet.data[action.rowId][_i].height = action.height;
 	      }return newState;
+	
+	    case Action.SELECT_COL:
+	      curWorkingArea.activeRange = (0, _grid_utils.getColFromId)(curSheet.data, action.colId);
+	      curWorkingArea.activeCell = curSheet.data[0][action.colId];
+	      return newState;
+	
+	    case Action.SELECT_ROW:
+	      curWorkingArea.activeRange = (0, _grid_utils.getRowFromId)(curSheet.data, action.rowId);
+	      curWorkingArea.activeCell = curSheet.data[action.rowId][0];
+	      return newState;
+	
 	    default:
 	      return state;
 	  }
@@ -41982,6 +41966,69 @@
 	thunk.withExtraArgument = createThunkMiddleware;
 	
 	exports['default'] = thunk;
+
+/***/ },
+/* 234 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.isCellActive = isCellActive;
+	exports.isCellSelected = isCellSelected;
+	exports.isHeaderActive = isHeaderActive;
+	exports.headerSize = headerSize;
+	
+	var _grid_utils = __webpack_require__(214);
+	
+	function isCellActive(selectedRange, cell) {
+	  if (selectedRange === undefined) return false;
+	
+	  if (selectedRange[0] === undefined) return false;
+	
+	  var activeCell = selectedRange[0][0];
+	
+	  return activeCell.pos.row === cell.pos.row && activeCell.pos.col == cell.pos.col;
+	}
+	
+	function isCellSelected(selectedRange, cell) {
+	  if (selectedRange === undefined) return false;
+	
+	  if (selectedRange[0] === undefined) return false;
+	
+	  var startRow = selectedRange[0][0].pos.row;
+	  var endRow = startRow + selectedRange.length - 1;
+	
+	  var startCol = selectedRange[0][0].pos.col;
+	  var endCol = startCol + selectedRange[0].length - 1;
+	
+	  return (0, _grid_utils.between)(cell.pos.row, startRow, endRow) && (0, _grid_utils.between)(cell.pos.col, startCol, endCol);
+	}
+	
+	function isHeaderActive(range, ownProps) {
+	  if (range.length < 1 || range[0].length < 1) return false;
+	
+	  if (ownProps.col) {
+	    var colRange = range[0][0].pos.col + range[0].length - 1;
+	
+	    if ((0, _grid_utils.between)(ownProps.colId, range[0][0].pos.col, colRange)) return true;
+	  } else {
+	    var rowRange = range[0][0].pos.row + range.length - 1;
+	
+	    if ((0, _grid_utils.between)(ownProps.rowId, range[0][0].pos.row, rowRange)) return true;
+	  }
+	  return false;
+	}
+	
+	function headerSize(grid, ownProps) {
+	  if (ownProps.col) {
+	    return grid[0][ownProps.colId].width;
+	  } else {
+	    return grid[ownProps.rowId][0].height;
+	  }
+	}
 
 /***/ }
 /******/ ]);

@@ -3,6 +3,7 @@ import GridHeaderCellContainer from './grid_header_cell_container';
 
 export default class GridHeader extends React.Component {
   render() {
+
     const cells = this.props.row.map((cell, idx) => {
       if(!this.props.col) {
         return (
@@ -10,7 +11,7 @@ export default class GridHeader extends React.Component {
             key={idx}
             col={true}
             colId={idx}
-            rowId={this.props.curId}
+            rowId=""
             cell={cell}
             />
         );
@@ -19,7 +20,7 @@ export default class GridHeader extends React.Component {
           <GridHeaderCellContainer
             key={idx}
             col={false}
-            colId={this.props.curId}
+            colId=""
             rowId={idx}
             cell={cell}
             />

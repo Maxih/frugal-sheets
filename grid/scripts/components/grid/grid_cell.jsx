@@ -1,6 +1,7 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import * as Util from '../../utils/grid_utils';
+import {merge} from 'lodash';
+import CellInputContainer from '../tool/cell_input_container';
 
 
 export default class GridCell extends React.Component {
@@ -16,19 +17,13 @@ export default class GridCell extends React.Component {
     this.cellChanged = this.cellChanged.bind(this);
   }
 
-  componentDidUpdate() {
-    if(this.refs.cellTextArea) {
-      ReactDOM.findDOMNode(this.refs.cellTextArea).focus();
-    }
-  }
-
   shouldComponentUpdate(nextProps) {
     if(
       (this.props.cell.content !== nextProps.cell.content) ||
       (this.props.cell.width !== nextProps.cell.width) ||
       (this.props.cell.height !== nextProps.cell.height) ||
-      (this.props.cell.selected !== nextProps.cell.selected) ||
-      (this.props.cell.active !== nextProps.cell.active))
+      (this.props.selected !== nextProps.selected) ||
+      (this.props.active !== nextProps.active))
       return true;
 
     return false
@@ -70,16 +65,12 @@ export default class GridCell extends React.Component {
   generateCellClass() {
     let className = "grid-cell";
 
-    // if(!(startVal.row === endVal.row && startVal.col === endVal.col))
-    //   if(Util.cellInSelection(rowId, colId, startVal, endVal))
-    //     className += " active-cell";
-
-    if(this.props.cell.selected) {
-      className += " active-cell";
+    if(this.props.selected) {
+      className += " selected-cell";
     }
 
-    if(this.props.cell.active)
-      className += " selected-cell";
+    if(this.props.active)
+      className += " active-cell";
 
       return className;
   }
@@ -87,9 +78,9 @@ export default class GridCell extends React.Component {
   render() {
     let content = this.props.cell.content;
 
-    if(this.props.cell.active) {
+    if(this.props.active) {
       content = (
-        <textarea ref="cellTextArea" onChange={this.cellChanged} value={content} />
+        <CellInputContainer refName="cellRef" cell={this.props.cell} updateCell={this.props.updateCell} />
       );
     }
 

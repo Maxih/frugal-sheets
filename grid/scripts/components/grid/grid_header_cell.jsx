@@ -8,12 +8,12 @@ export default class GridHeaderCell extends React.Component {
     super(props);
 
     this.state = {
-      content: props.cell.content,
-      size: props.cell.size
+      size: props.size
     }
 
     this.headerResize = this.headerResize.bind(this);
     this.resizeEnd = this.resizeEnd.bind(this);
+    this.selectCells = this.selectCells.bind(this);
   }
 
   headerResize(e) {
@@ -54,35 +54,38 @@ export default class GridHeaderCell extends React.Component {
   generateCellClass() {
     let className = "grid-cell";
 
-    const startVal = this.props.selection.start;
-    const endVal = this.props.selection.end;
-    const {rowId, colId, activeCell} = this.props;
-
-
-    if(((activeCell.row === rowId || activeCell.col === colId) ||
-      (Util.between(rowId, startVal.row, endVal.row) || Util.between(colId, startVal.col, endVal.col)))){
-      className += " active-cell";
-    }
+    if(this.props.active)
+      className += " selected-cell";
 
     return className;
   }
 
-  render() {
+  selectCells() {
+    const {rowId, colId, selectCol, selectRow} = this.props;
+    if(this.props.col) {
+      selectCol(colId);
+    } else {
+      selectRow(rowId);
+    }
+  }
 
+  render() {
     const style = {};
+    const {rowId, colId} = this.props;
 
     if(this.props.col) {
-      style.width = this.props.cell.size;
+      style.width = this.props.size;
     } else {
-      style.height = this.props.cell.size;
+      style.height = this.props.size;
     }
 
     return (
       <span
         className={this.generateCellClass()}
         style={style}
+        onClick={this.selectCells}
         >
-        {this.state.content}
+        {this.props.cell.content}
         <span draggable="true" onDrag={this.headerResize} onDragEnd={this.resizeEnd} className="resizer"></span>
       </span>
     );

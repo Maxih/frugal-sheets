@@ -3,17 +3,12 @@ import { updateCell } from '../../actions/sheet_actions';
 import CellInput from './cell_input';
 
 const mapStateToProps = (state) => {
-  const cell = state.doc.sheets[state.doc.activeSheet].workingArea.activeCell;
-
-  return {
-    activeCell: cell,
-    cell: state.doc.sheets[state.doc.activeSheet].data[cell.pos.row][cell.pos.col]
-  };
+  return {};
 };
 
-const mapDispatchToProps = dispatch => ({
-  updateCell: (cell) => dispatch(updateCell(cell)),
-});
+const mapDispatchToProps = dispatch => {
+  return {};
+};
 
 export default connect(
   mapStateToProps,
