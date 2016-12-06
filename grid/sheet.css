@@ -78,9 +78,10 @@
 
 .formula {
   flex-grow: 1;
+  overflow: hidden;
 }
 
-.formula input {
+.formula textarea {
   border: none;
   border-left: 1px solid #CCC;
   width: 100%;
@@ -90,4 +91,80 @@
   box-sizing: border-box;
   outline: none;
   padding-left: 10px;
+}
+
+.cell-style {
+  display: block;
+  height: 35px;
+  background: linear-gradient(#f4f4f4, #eeeeee);
+  border-top: 1px solid #CCC;
+  border-bottom: 1px solid #CCC;
+}
+
+.style-bar ul {
+  padding: 0;
+  margin: 3px;
+  float: right;
+}
+
+.style-bar li {
+  list-style-type: none;
+  display: inline-block;
+  border: 1px solid transparent;
+  margin: 0;
+  padding: 0;
+  height: 26px;
+  width: 26px;
+}
+
+.style-bar li:first-child {
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+}
+.style-bar li:last-child {
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
+
+.style-bar li:hover {
+  cursor: pointer;
+  box-shadow: 0px 0px 1px #BBB;
+  border: 1px solid #ccc;
+
+}
+
+.style-bar li.active-style {
+  background-color: #E4E4E4;
+  border-color: #CCC;
+  box-shadow: inset 0px 0px 2px #999;
+}
+
+.style-bar li.active-style:hover {
+  box-shadow: inset 0px 0px 2px #999;
+}
+
+.style-type-bold {
+  background: url("./images/bold.png") center center no-repeat;
+  background-size: auto 13px;
+}
+
+.style-type-italic {
+  background: url("./images/italic.png") center center no-repeat;
+  background-size: auto 12px;
+}
+
+.style-type-linethrough {
+  background: url("./images/strikethrough.png") center center no-repeat;
+  background-size: auto 14px;
+}
+.style-type-paintbucket {
+  background: url("./images/paintbucket.png") center center no-repeat;
+  background-size: auto 14px;
+}
+
+
+.color-picker {
+  position: absolute;
+  z-index: 20;
+  right: 0;
 }

@@ -29,8 +29,9 @@ export default class CellInput extends React.Component {
   }
 
   render() {
+    const style = this.props.styling ? this.props.cell.style : {};
     return (
-      <textarea className="cell-val-textarea" ref={this.props.refName} onChange={this.cellChanged} value={this.props.cell.content} />
+      <textarea style={style} className="cell-val-textarea" ref={this.props.refName} onChange={this.cellChanged} value={this.props.cell.content} />
     );
   }
 }

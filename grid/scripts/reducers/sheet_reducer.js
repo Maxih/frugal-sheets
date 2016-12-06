@@ -1,9 +1,18 @@
 import * as Action from '../actions/sheet_actions.js';
-import {blankSheet, getCellsBetween, getRowFromId, getColFromId} from '../utils/grid_utils';
+import {blankSheet, getCellsBetween, getRowFromId, getColFromId, updateActiveRangeStyle, mapRangeToGrid} from '../utils/grid_utils';
 import {merge} from 'lodash';
 
 const workingAreaDefaults = {
-  activeCell: { pos: {row: 0, col: 0}, content: ""},
+  activeCell: {
+    content: "",
+    width: 100,
+    height: 26,
+    style: {},
+    pos: {
+      row: 0,
+      col: 0
+    },
+  },
   activeRange: [],
   selecting: false,
 };
@@ -24,11 +33,15 @@ function SheetReducer(state = defaults, action) {
   const curWorkingArea = curSheet.workingArea;
 
   switch(action.type) {
+    case Action.UPDATE_RANGE:
+      curWorkingArea.activeRange = updateActiveRangeStyle(curWorkingArea.activeRange, action.cell);
+      curSheet.data = mapRangeToGrid(curWorkingArea.activeRange, curSheet.data);
+
     case Action.UPDATE_CELL:
-      const cell = action.cell;
-      curSheet.data[cell.pos.row][cell.pos.col].content = cell.content;
-      curWorkingArea.activeCell.content = cell.content;
+      curSheet.data[action.cell.pos.row][action.cell.pos.col] = action.cell;
+      curWorkingArea.activeCell = action.cell;
       return newState;
+
 
     case Action.CHANGE_ACTIVE_SHEET:
       newState.activeSheet = action.activeSheet
@@ -58,7 +71,6 @@ function SheetReducer(state = defaults, action) {
       return newState;
 
     case Action.RESIZE_ROW:
-
       for(let i = 0; i < curSheet.data[0].length; i++)
         curSheet.data[action.rowId][i].height = action.height;
 

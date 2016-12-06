@@ -1,4 +1,5 @@
 export const UPDATE_CELL = "UPDATE_CELL";
+export const UPDATE_RANGE = "UPDATE_RANGE";
 export const CHANGE_ACTIVE_SHEET = "CHANGE_ACTIVE_SHEET";
 export const ADD_SHEET = "ADD_SHEET";
 export const RECEIVE_START_CELL = "RECEIVE_START_CELL";
@@ -11,6 +12,11 @@ export const SELECT_COL = "SELECT_COL";
 
 export const updateCell = (cell) => ({
   type: UPDATE_CELL,
+  cell: cell
+});
+
+export const updateRange = (cell) => ({
+  type: UPDATE_RANGE,
   cell: cell
 });
 

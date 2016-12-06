@@ -1,3 +1,24 @@
+export function updateActiveRangeStyle(range, cell) {
+  for(let i = 0; i < range.length; i++) {
+    for(let j = 0; j < range[i].length; j++) {
+      range[i][j].style = cell.style;
+    }
+  }
+
+  return range;
+}
+
+export function mapRangeToGrid(range, grid) {
+  for(let i = 0; i < range.length; i++) {
+    for(let j = 0; j < range[i].length; j++) {
+      const cell = range[i][j];
+      grid[cell.pos.row][cell.pos.col] = cell;
+    }
+  }
+
+  return grid;
+}
+
 export function getRowFromId(gridState, id) {
   return getCellsBetween(gridState, {col: 0, row: id}, {col: gridState[0].length-1, row:id})
 }
@@ -65,6 +86,7 @@ export function blankSheet() {
           content: "",
           width: 100,
           height: 26,
+          style: {},
           pos: {
             row: i,
             col: j
@@ -72,8 +94,6 @@ export function blankSheet() {
         };
       }
     }
-
-    grid[0][0].active = true;
 
     return grid;
   }

@@ -14,7 +14,6 @@ export default class GridCell extends React.Component {
 
     this.mouseOver = this.mouseOver.bind(this);
     this.mouseAction = this.mouseAction.bind(this);
-    this.cellChanged = this.cellChanged.bind(this);
   }
 
   shouldComponentUpdate(nextProps) {
@@ -24,9 +23,16 @@ export default class GridCell extends React.Component {
       (this.props.cell.height !== nextProps.cell.height) ||
       (this.props.selected !== nextProps.selected) ||
       (this.props.active !== nextProps.active))
-      return true;
+        return true;
 
-    return false
+    const oldKeys = Object.keys(this.props.cell.style).sort();
+    const newKeys = Object.keys(nextProps.cell.style).sort();
+
+    let is_same = (oldKeys.length == newKeys.length) && oldKeys.every((element, index) => {
+        return element === newKeys[index] && this.props.cell.style[element] === nextProps.cell.style[element];
+    });
+
+    return !is_same;
   }
 
   mouseAction(e) {
@@ -50,18 +56,6 @@ export default class GridCell extends React.Component {
 
   }
 
-  cellChanged(e) {
-    this.setState({content: e.target.value});
-    const {rowId, colId, updateCell} = this.props;
-    const cell = {
-      content: e.target.value,
-      col: colId,
-      row: rowId
-    }
-
-    updateCell(cell);
-  }
-
   generateCellClass() {
     let className = "grid-cell";
 
@@ -80,14 +74,16 @@ export default class GridCell extends React.Component {
 
     if(this.props.active) {
       content = (
-        <CellInputContainer refName="cellRef" cell={this.props.cell} updateCell={this.props.updateCell} />
+        <CellInputContainer styling={true} refName="cellRef" cell={this.props.cell} updateCell={this.props.updateCell} />
       );
     }
 
-    const style = {
+    const style = merge({}, this.props.cell.style, {
       width: this.props.cell.width,
       height: this.props.cell.height
-    }
+    });
+
+
 
     return (
       <span
