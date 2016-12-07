@@ -1,30 +1,27 @@
 import React from 'react';
 import {merge} from 'lodash';
 import { CompactPicker } from 'react-color';
+import BoldButton from './tool_box_buttons/bold_button';
+import ItalicButton from './tool_box_buttons/italic_button';
+import LineThroughButton from './tool_box_buttons/linethrough_button';
+import ColorButton from './tool_box_buttons/color_button';
+import FontSizeButton from './tool_box_buttons/font_size_button';
 
 
 export default class CellStyle extends React.Component {
   constructor(props) {
     super(props);
-
-    this.state = {
-      pickingColor: false
-    }
-
-    this.toggleColorPicker = this.toggleColorPicker.bind(this);
-    this.cellColorChange = this.cellColorChange.bind(this);
   }
 
-  toggleStyle(styleName, e) {
-
+  toggleStyle(style) {
     if(this.props.cell.style === undefined)
       return;
 
     const newStyledCell = merge({}, this.props.cell);
-    const keys = Object.keys(styleName);
+    const keys = Object.keys(style);
 
     if(newStyledCell.style[keys[0]] === undefined)
-      newStyledCell.style = merge(newStyledCell.style, styleName);
+      newStyledCell.style = merge(newStyledCell.style, style);
     else
       delete newStyledCell.style[keys[0]];
 
@@ -32,23 +29,14 @@ export default class CellStyle extends React.Component {
     this.props.updateRange(newStyledCell);
   }
 
-  updateCellStyles(cell) {
-
-  }
-
-  toggleColorPicker(e) {
-    this.setState({pickingColor: !this.state.pickingColor});
-  }
-
-  cellColorChange(color, event) {
+  changeStyle(style, value) {
     if(this.props.cell.style === undefined)
       return;
 
     const newStyledCell = merge({}, this.props.cell);
-    newStyledCell.style = merge(newStyledCell.style, {"backgroundColor": color.hex});
 
+    newStyledCell.style[style] = value;
     this.props.updateRange(newStyledCell);
-    this.setState({pickingColor: false});
   }
 
   render() {
@@ -63,25 +51,16 @@ export default class CellStyle extends React.Component {
     return (
       <div className="style-bar">
         <ul>
-          <li
-            className={cellStyle.fontWeight === undefined ? "style-type-bold" : "style-type-bold active-style"}
-            onClick={this.toggleStyle.bind(this, {"fontWeight": "bold"})}
-            ></li>
-
-          <li
-            className={cellStyle.fontStyle === undefined ? "style-type-italic" : "style-type-italic active-style"}
-            onClick={this.toggleStyle.bind(this, {"fontStyle": "italic"})}
-            ></li>
-
-          <li className={cellStyle.textDecoration === undefined ? "style-type-linethrough" : "style-type-linethrough active-style"}
-              onClick={this.toggleStyle.bind(this, {"textDecoration": "line-through"})}
-            ></li>
-
-          <li className={cellStyle.backgroundColor === undefined ? "style-type-paintbucket" : "style-type-paintbucket active-style"}
-              onClick={this.toggleColorPicker}
-            ></li>
-
-          {this.state.pickingColor ? colorPicker : ""}
+          <FontSizeButton size={this.props.cell.style} changeStyle={this.changeStyle.bind(this)} />
+        </ul>
+        <ul>
+          <BoldButton toggleStyle={this.toggleStyle.bind(this, {"fontWeight": "bold"})} active={cellStyle.fontWeight === undefined} />
+          <ItalicButton toggleStyle={this.toggleStyle.bind(this, {"fontStyle": "italic"})} active={cellStyle.fontStyle === undefined} />
+          <LineThroughButton toggleStyle={this.toggleStyle.bind(this, {"textDecoration": "line-through"})} active={cellStyle.textDecoration === undefined} />
+          <ColorButton color={this.props.cell.style} styleProperty="color" changeStyle={this.changeStyle.bind(this, "color")} className="style-type-fontcolor" />
+        </ul>
+        <ul>
+          <ColorButton color={this.props.cell.style} styleProperty="backgroundColor" changeStyle={this.changeStyle.bind(this, "backgroundColor")} className="style-type-paintbucket" />
         </ul>
       </div>
     );

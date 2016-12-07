@@ -19,12 +19,28 @@ body {
   box-sizing: border-box;
   padding: 26px 0px 0px 50px;
   z-index: 5;
+  border-collapse:collapse
 }
 
 .grid-row {
   display: block;
   white-space: nowrap;
 }
+
+.grid-cell {
+  display: inline-block;
+  width: 100px;
+  height: 26px;
+  font-size: 12px;
+  overflow: hidden;
+  background: #fff;
+  border-bottom: 1px solid #CCC;
+  border-right: 1px solid #CCC;
+  box-sizing: border-box;
+  cursor: default;
+  font-family: Arial;
+}
+
 
 .grid-row-labels {
   display: inline-block;
@@ -68,18 +84,6 @@ body {
           user-select: none;
 }
 
-.grid-cell {
-  display: inline-block;
-  width: 100px;
-  height: 26px;
-  font-size: 12px;
-  overflow: hidden;
-  background: #fff;
-  margin: 0px 1px 1px 0px;
-  box-sizing: border-box;
-  cursor: default;
-  font-family: Arial;
-}
 
 .grid-blank-label {
   height: 26px;

@@ -101,13 +101,13 @@
   border-bottom: 1px solid #CCC;
 }
 
-.style-bar ul {
+.style-bar > ul {
   padding: 0;
   margin: 3px;
-  float: right;
+  float: left;
 }
 
-.style-bar li {
+.style-bar > ul > li {
   list-style-type: none;
   display: inline-block;
   border: 1px solid transparent;
@@ -115,31 +115,32 @@
   padding: 0;
   height: 26px;
   width: 26px;
+  position: relative;
 }
 
-.style-bar li:first-child {
+.style-bar > ul > li:first-child {
   border-top-left-radius: 3px;
   border-bottom-left-radius: 3px;
 }
-.style-bar li:last-child {
+.style-bar > ul > li:last-child {
   border-top-right-radius: 3px;
   border-bottom-right-radius: 3px;
 }
 
-.style-bar li:hover {
+.style-bar > ul > li:hover {
   cursor: pointer;
   box-shadow: 0px 0px 1px #BBB;
   border: 1px solid #ccc;
 
 }
 
-.style-bar li.active-style {
+.style-bar > ul > li.active-style {
   background-color: #E4E4E4;
   border-color: #CCC;
   box-shadow: inset 0px 0px 2px #999;
 }
 
-.style-bar li.active-style:hover {
+.style-bar > ul > li.active-style:hover {
   box-shadow: inset 0px 0px 2px #999;
 }
 
@@ -161,10 +162,51 @@
   background: url("./images/paintbucket.png") center center no-repeat;
   background-size: auto 14px;
 }
+.style-type-fontcolor {
+  background: url("./images/fontcolor.png") center center no-repeat;
+  background-size: auto 14px;
+}
 
 
 .color-picker {
   position: absolute;
   z-index: 20;
-  right: 0;
+  left: 0;
+}
+
+.paintbucket-swatch {
+  display: block;
+  width: 20px;
+  height: 4px;
+  margin: 21px auto 0 auto;
+}
+
+.style-type-fontsize {
+  font-family: Arial;
+  font-size: 12px;
+  position: relative;
+  text-align: center;
+  line-height: 27px;
+  font-weight: bold;
+}
+.fontsize-dropdown {
+  left: 0px;
+  top: 28px;
+  position: absolute;
+  z-index: 20;
+  margin: 0;
+  padding: 0;
+  background: #FFF;
+  box-shadow: 0px 0px 10px #999;
+}
+
+.fontsize-dropdown li {
+  list-style-type: none;
+  background: #FFF;
+  padding: 0px 30px 0px 10px;
+  font-weight: normal;
+}
+.fontsize-dropdown li:hover {
+  cursor: pointer;
+  background: #EEE;
 }

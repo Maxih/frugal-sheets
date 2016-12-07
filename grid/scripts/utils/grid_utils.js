@@ -1,3 +1,13 @@
+export function objectSameVals(oldObj, newObj) {
+  const oldKeys = Object.keys(oldObj).sort();
+  const newKeys = Object.keys(newObj).sort();
+
+  return (oldKeys.length == newKeys.length) && oldKeys.every((element, index) => {
+      return element === newKeys[index] && oldObj[element] === newObj[element];
+  });
+
+}
+
 export function updateActiveRangeStyle(range, cell) {
   for(let i = 0; i < range.length; i++) {
     for(let j = 0; j < range[i].length; j++) {

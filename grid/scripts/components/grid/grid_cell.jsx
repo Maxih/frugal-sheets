@@ -25,14 +25,7 @@ export default class GridCell extends React.Component {
       (this.props.active !== nextProps.active))
         return true;
 
-    const oldKeys = Object.keys(this.props.cell.style).sort();
-    const newKeys = Object.keys(nextProps.cell.style).sort();
-
-    let is_same = (oldKeys.length == newKeys.length) && oldKeys.every((element, index) => {
-        return element === newKeys[index] && this.props.cell.style[element] === nextProps.cell.style[element];
-    });
-
-    return !is_same;
+    return !Util.objectSameVals(this.props.cell.style, nextProps.cell.style);
   }
 
   mouseAction(e) {
@@ -40,20 +33,17 @@ export default class GridCell extends React.Component {
     const {receiveStartCell, receiveEndCell} = this.props;
 
     if(e.type === "mouseup") {
-      receiveEndCell(this.props.cell)
+      receiveEndCell(this.props.cell);
     } else {
-      receiveStartCell(this.props.cell)
+      receiveStartCell(this.props.cell);
     }
   }
 
   mouseOver() {
     const {rowId, colId, tempEndCell} = this.props;
 
-    if(this.props.selecting) {
-
+    if(this.props.selecting)
       tempEndCell(this.props.cell);
-    }
-
   }
 
   generateCellClass() {
@@ -71,7 +61,6 @@ export default class GridCell extends React.Component {
 
   render() {
     let content = this.props.cell.content;
-
     if(this.props.active) {
       content = (
         <CellInputContainer styling={true} refName="cellRef" cell={this.props.cell} updateCell={this.props.updateCell} />

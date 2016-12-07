@@ -1,11 +1,39 @@
 import {between} from '../utils/grid_utils';
 
+export function selectedBorders(range, cell) {
+  if(range === undefined)
+    return {};
+
+  if(range[0] === undefined)
+    return {};
+
+  const upperPos = range[0][0];
+  const lowerPos = range[range.length-1][range[0].length-1];
+
+  const borders = {};
+
+  if(cell.pos.row === upperPos.pos.row) {
+    borders.borderTop = "1px solid #4285f4";
+  }
+  if(cell.pos.row === lowerPos.pos.row) {
+    borders.borderBottom = "1px solid #4285f4";
+  }
+  if(cell.pos.col === upperPos.pos.col) {
+    borders.borderLeft = "1px solid #4285f4";
+  }
+  if(cell.pos.col === lowerPos.pos.col) {
+    borders.borderRight = "1px solid #4285f4";
+  }
+
+  return borders;
+}
+
 export function isCellActive(selectedRange, cell) {
   if(selectedRange === undefined)
     return false;
 
   if(selectedRange[0] === undefined)
-    return false
+    return false;
 
   const activeCell = selectedRange[0][0];
 
