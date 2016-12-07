@@ -41905,6 +41905,10 @@
 	
 	var _font_size_button2 = _interopRequireDefault(_font_size_button);
 	
+	var _font_family_button = __webpack_require__(467);
+	
+	var _font_family_button2 = _interopRequireDefault(_font_family_button);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -41958,6 +41962,11 @@
 	      return _react2.default.createElement(
 	        'div',
 	        { className: 'style-bar' },
+	        _react2.default.createElement(
+	          'ul',
+	          null,
+	          _react2.default.createElement(_font_family_button2.default, { family: this.props.cell.style, changeStyle: this.changeStyle.bind(this) })
+	        ),
 	        _react2.default.createElement(
 	          'ul',
 	          null,
@@ -54746,7 +54755,8 @@
 	        { className: '' + this.props.className + (this.state.pickingColor ? " active-style" : ""),
 	          onClick: this.toggleColorPicker },
 	        _react2.default.createElement('span', { className: 'paintbucket-swatch', style: cellStyle[this.props.styleProperty] ? { backgroundColor: cellStyle[this.props.styleProperty] } : { backgroundColor: "#FFF" } }),
-	        this.state.pickingColor ? colorPicker : ""
+	        this.state.pickingColor ? colorPicker : "",
+	        _react2.default.createElement('span', { className: 'dropdown-arrow' })
 	      );
 	    }
 	  }]);
@@ -54837,7 +54847,8 @@
 	          className: this.state.pickingSize ? "style-type-fontsize active-style" : "style-type-fontsize",
 	          onClick: this.toggleSizePicker },
 	        this.props.size.fontSize ? this.props.size.fontSize : "12",
-	        this.state.pickingSize ? this.renderDropDown() : ""
+	        this.state.pickingSize ? this.renderDropDown() : "",
+	        _react2.default.createElement("span", { className: "dropdown-arrow" })
 	      );
 	    }
 	  }]);
@@ -55039,6 +55050,104 @@
 	thunk.withExtraArgument = createThunkMiddleware;
 	
 	exports['default'] = thunk;
+
+/***/ },
+/* 467 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	String.prototype.trunc = String.prototype.trunc || function (n) {
+	  return this.length > n ? this.substr(0, n - 1) + '...' : this;
+	};
+	
+	var FontFamilyButton = function (_React$Component) {
+	  _inherits(FontFamilyButton, _React$Component);
+	
+	  function FontFamilyButton() {
+	    _classCallCheck(this, FontFamilyButton);
+	
+	    var _this = _possibleConstructorReturn(this, (FontFamilyButton.__proto__ || Object.getPrototypeOf(FontFamilyButton)).call(this));
+	
+	    _this.state = {
+	      pickingFamily: false
+	    };
+	
+	    _this.families = ["Arial", "Tahoma", "sans-serif", "Comic Sans MS"];
+	
+	    _this.toggleFamilyPicker = _this.toggleFamilyPicker.bind(_this);
+	    return _this;
+	  }
+	
+	  _createClass(FontFamilyButton, [{
+	    key: 'toggleFamilyPicker',
+	    value: function toggleFamilyPicker() {
+	      this.setState({ pickingFamily: !this.state.pickingFamily });
+	    }
+	  }, {
+	    key: 'selectFamily',
+	    value: function selectFamily(family) {
+	      this.props.changeStyle("fontFamily", family);
+	      this.setState({ pickingFamily: false });
+	    }
+	  }, {
+	    key: 'renderDropDown',
+	    value: function renderDropDown() {
+	      var _this2 = this;
+	
+	      var options = this.families.map(function (family) {
+	        return _react2.default.createElement(
+	          'li',
+	          { key: family, onClick: _this2.selectFamily.bind(_this2, family) },
+	          family
+	        );
+	      });
+	
+	      return _react2.default.createElement(
+	        'ul',
+	        { className: 'fontsize-dropdown' },
+	        options
+	      );
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var style = this.props.family.fontFamily ? { fontFamily: this.props.family.fontFamily } : {};
+	      return _react2.default.createElement(
+	        'li',
+	        {
+	          style: style,
+	          className: this.state.pickingFamily ? "style-type-fontfamily active-style" : "style-type-fontfamily",
+	          onClick: this.toggleFamilyPicker },
+	        this.props.family.fontFamily ? this.props.family.fontFamily.trunc(10) : "Arial",
+	        this.state.pickingFamily ? this.renderDropDown() : "",
+	        _react2.default.createElement('span', { className: 'dropdown-arrow' })
+	      );
+	    }
+	  }]);
+	
+	  return FontFamilyButton;
+	}(_react2.default.Component);
+	
+	exports.default = FontFamilyButton;
 
 /***/ }
 /******/ ]);

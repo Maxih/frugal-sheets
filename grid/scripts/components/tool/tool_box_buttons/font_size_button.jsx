@@ -1,5 +1,7 @@
 import React from 'react';
 
+
+
 export default class FontSizeButton extends React.Component {
   constructor() {
     super();
@@ -43,6 +45,7 @@ export default class FontSizeButton extends React.Component {
           onClick={this.toggleSizePicker}>
           {this.props.size.fontSize ? this.props.size.fontSize : "12"}
           {this.state.pickingSize ? this.renderDropDown() : ""}
+          <span className="dropdown-arrow"></span>
         </li>
     )
   }

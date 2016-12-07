@@ -40,6 +40,7 @@ export default class ColorButton extends React.Component {
           onClick={this.toggleColorPicker}>
         <span className="paintbucket-swatch" style={cellStyle[this.props.styleProperty] ? {backgroundColor: cellStyle[this.props.styleProperty] } : {backgroundColor: "#FFF" }}></span>
         {this.state.pickingColor ? colorPicker : ""}
+        <span className="dropdown-arrow"></span>
       </li>
     );
   }

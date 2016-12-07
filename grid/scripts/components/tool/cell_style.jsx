@@ -6,6 +6,7 @@ import ItalicButton from './tool_box_buttons/italic_button';
 import LineThroughButton from './tool_box_buttons/linethrough_button';
 import ColorButton from './tool_box_buttons/color_button';
 import FontSizeButton from './tool_box_buttons/font_size_button';
+import FontFamilyButton from './tool_box_buttons/font_family_button';
 
 
 export default class CellStyle extends React.Component {
@@ -50,6 +51,9 @@ export default class CellStyle extends React.Component {
 
     return (
       <div className="style-bar">
+        <ul>
+          <FontFamilyButton family={this.props.cell.style} changeStyle={this.changeStyle.bind(this)} />
+        </ul>
         <ul>
           <FontSizeButton size={this.props.cell.style} changeStyle={this.changeStyle.bind(this)} />
         </ul>
